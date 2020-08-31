@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %} REGISTER PAGE {% endblock %}
+{% block content %}
+<h1>EXECUTIVE REGISTER PAGE</h1>
+<form method="POST">
+    <p>Username: </p>
+    <p><input type="text" name="name"/></p>
+    <p>Password: </p>
+    <p><input type="password" name="password"/></p>
+    <p>Position: </p>
+    <input type="radio" name="position" id="admin" value="admin"/>
+    <label for="admin">Admin</label>
+    <input type="radio" name="position" id="manager" value="manager"/>
+    <label for="manager">Manager</label>
+    <input type="radio" name="position" id="engineer" value="engineer"/>
+    <label for="engineer">Engineer</label>
+    <p><input type="submit" name="submit"/></p>
+</form>
+{% endblock %}
