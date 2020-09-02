@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}Admin page{% endblock %}
+
+{% block content %}
+    <form action="/manager" style="display: inline;">
+        <button>Car rental history</button>    
+    </form>
+    <form action="/manager" style="display: inline;">
+        <button>Search users and cars</button>
+    </form>
+    <form action="/manager" style="display: inline;">
+        <button>Modify information of users and cars</button>
+    </form>
+    <form action="/manager" style="display: inline;">
+        <button>Report car</button>
+    </form>
+    <form action="/logout" style="display: inline;">
+        <button>Logout</button>    
+    </form>
+{% endblock %}
