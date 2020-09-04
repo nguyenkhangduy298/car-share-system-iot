@@ -66,7 +66,7 @@ class DatabaseUtils:
 
     def getOneCar(self,property,value):
         with self.connection.cursor() as cursor:
-            cursor.execute("select * from Car where "+property+"="+value)
+            cursor.execute("select * from Car where "+property+"=\""+value+"\"")
             # cursor.execute("select * from Car where CarID=2")
             return cursor.fetchall()
 

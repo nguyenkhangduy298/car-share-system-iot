@@ -43,17 +43,17 @@ class Menu:
 
     def viewHistory(self,custId):
         print("-----View Car History------------")
-        print("{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}".format("CarID","Status", "Name", "Model", "Brand","Company", "Colour", "Seats", "Description","Category", "CostPerHour","Location"))
+        print("{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}".format("CarID","Status", "Name", "Model", "Brand","Company", "Colour", "Seats", "Description","Category", "CostPerHour","Location","CustID"))
         with DatabaseUtils() as db:
             for car in db.viewHistory(custId):
-                print("{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}".format(car[0], car[1], car[2], car[3], car[4], car[5], car[6], car[7], car[8], car[9], car[10], car[11]))
+                print("{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}".format(car[0], car[1], car[2], car[3], car[4], car[5], car[6], car[7], car[8], car[9], car[10], car[11], car[12]))
 
     def searchCar(self,property,value):
         print("-----Car Searched-------------")
-        print("{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}".format("CarID","Status", "Name", "Model", "Brand","Company", "Colour", "Seats", "Description","Category", "CostPerHour","Location"))
+        print("{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}".format("CarID","Status", "Name", "Model", "Brand","Company", "Colour", "Seats", "Description","Category", "CostPerHour","Location","CustID"))
         with DatabaseUtils() as db:
             for car in db.getOneCar(property,value):
-                print("{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}".format(car[0], car[1], car[2], car[3], car[4], car[5], car[6], car[7], car[8], car[9], car[10], car[11]))
+                print("{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}".format(car[0], car[1], car[2], car[3], car[4], car[5], car[6], car[7], car[8], car[9], car[10], car[11], car[12]))
 
     def insertPerson(self):
         print("--- Insert Person ---")
