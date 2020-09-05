@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}
+Send email
+{% endblock %}
+
+{% block content %}
+<h1>EMAIL LOGIN</h1>
+<form method="POST">
+    <p>Password: </p>
+    <p><input type="password" name="password"/></p>
+    <p>Email content:</p>
+    <p><textarea name="content" cols="30" rows="5"></textarea></p>
+    <p><input type="submit" name="submit"/></p>
+</form>
+{% endblock %}
