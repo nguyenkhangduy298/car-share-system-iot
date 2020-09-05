@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, flash, redirect, url_for, session
 from flask_sqlalchemy import SQLAlchemy
 from passlib.hash import sha256_crypt
+from admin import admin
 
 HOST = "34.87.252.156"
 USER = "root"
@@ -9,6 +10,7 @@ DATABASE = "car_share_app"
 
 
 app = Flask(__name__)
+app.register_blueprint(admin, url_prefix="/admin")
 app.config["SQLALCHEMY_DATABASE_URI"] = "mysql://{}:{}@{}/{}".format(USER, PASSWORD, HOST, DATABASE)
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.secret_key = "secretKey"
@@ -33,28 +35,40 @@ def login():
     """
     Routing to login page for executive
     """
-    if request.method == "POST":
-        username = request.form["name"]
-        password = request.form["password"]
-        try:
-            executive = Executive.query.filter_by(username=username).first()
-            if (sha256_crypt.verify(password, executive.password)):
-                session["user"] = executive.username
-                if executive.position == "admin":
-                    return redirect(url_for("admin"))
-                elif executive.position == "manager":
-                    return "manager"
-                elif executive.position == "engineer":
-                    return "engineer"
-            else:
-                flash("Wrong password!")
+    if "user" not in session:
+        if request.method == "POST":
+            username = request.form["name"]
+            password = request.form["password"]
+            try:
+                executive = Executive.query.filter_by(username=username).first()
+                if (sha256_crypt.verify(password, executive.password)):
+                    session["user"] = executive.username
+                    session["position"] = executive.position
+                    if executive.position == "admin":
+                        return redirect(url_for("admin.adminHome"))
+                    elif executive.position == "manager":
+                        return "manager"
+                    elif executive.position == "engineer":
+                        return "engineer"
+                else:
+                    flash("Wrong password!")
+                    return render_template("login.html")
+            except (AttributeError):
+                flash("Cannot find user! Try again")
                 return render_template("login.html")
-        except (AttributeError):
-            flash("Cannot find user! Try again")
-            return render_template("login.html")
 
+        else:
+            return render_template("login.html")
     else:
-        return render_template("login.html")
+        if session["position"] == "admin":
+            flash("You are already logged in as admin")
+            return redirect(url_for("admin.adminHome"))
+        elif session["position"] == "manager":
+            flash("You are already logged in as manager")
+            return "manager"
+        elif session["position"] == "engineer":
+            flash("You are already logged in as engineer")
+            return "engineer"
 
 
 @app.route("/logout")
@@ -90,19 +104,8 @@ def manager():
     """
     Routing to manager's page
     """
-    if "user" in session:
+    if ("user" in session) and (session["position"] == "manager") :
         return render_template("manager.html")
-    else:
-        return redirect(url_for("login"))
-
-
-@app.route("/admin", methods=["GET"])
-def admin():
-    """
-    Routing to admin's page
-    """
-    if "user" in session:
-        return render_template("admin.html")
     else:
         return redirect(url_for("login"))
 
@@ -112,7 +115,7 @@ def engineer():
     """
     Routing to engineer's page
     """
-    if "user" in session:
+    if ("user" in session) and (session["position"] == "engineer"):
         return render_template("engineer.html")
     else:
         return redirect(url_for("login"))
