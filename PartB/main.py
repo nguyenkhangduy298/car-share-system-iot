@@ -1,21 +1,26 @@
 from flask import Flask, render_template, request, flash, redirect, url_for, session
 from flask_sqlalchemy import SQLAlchemy
+from flask_googlemaps import GoogleMaps
 from passlib.hash import sha256_crypt
-from admin import admin
+
+from admin import adminbp
+from engineer import engineerbp
 
 HOST = "34.87.252.156"
 USER = "root"
 PASSWORD = "abc123"
 DATABASE = "car_share_app"
 
-
 app = Flask(__name__)
-app.register_blueprint(admin, url_prefix="/admin")
+app.register_blueprint(adminbp, url_prefix="/admin")
+app.register_blueprint(engineerbp, url_prefix="/engineer")
+
 app.config["SQLALCHEMY_DATABASE_URI"] = "mysql://{}:{}@{}/{}".format(USER, PASSWORD, HOST, DATABASE)
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.secret_key = "secretKey"
 
 db = SQLAlchemy(app)
+googlemaps = GoogleMaps(app)
 
 
 class Executive(db.Model):
@@ -30,6 +35,19 @@ class Executive(db.Model):
         self.position = position
 
 
+class ReportedCar(db.Model):
+    __tablename__ = "ReportedCar"
+    id = db.Column(db.Integer, primary_key=True)
+    location = db.Column(db.String(200))
+    latitude = db.Column(db.Float)
+    longitude = db.Column(db.Float)
+
+    def __init__(self, location, latitude, longitude):
+        self.location = location
+        self.latitude = latitude
+        self.longitude = longitude
+
+@app.route("/", methods=["POST", "GET"])
 @app.route("/login", methods=["POST", "GET"])
 def login():
     """
@@ -45,11 +63,11 @@ def login():
                     session["user"] = executive.username
                     session["position"] = executive.position
                     if executive.position == "admin":
-                        return redirect(url_for("admin.adminHome"))
+                        return redirect(url_for("adminbp.adminHome"))
                     elif executive.position == "manager":
                         return "manager"
                     elif executive.position == "engineer":
-                        return "engineer"
+                        return redirect(url_for("engineerbp.engineerHome"))
                 else:
                     flash("Wrong password!")
                     return render_template("login.html")
@@ -62,13 +80,13 @@ def login():
     else:
         if session["position"] == "admin":
             flash("You are already logged in as admin")
-            return redirect(url_for("admin.adminHome"))
+            return redirect(url_for("adminbp.adminHome"))
         elif session["position"] == "manager":
             flash("You are already logged in as manager")
             return "manager"
         elif session["position"] == "engineer":
             flash("You are already logged in as engineer")
-            return "engineer"
+            return redirect(url_for("engineerbp.engineerHome"))
 
 
 @app.route("/logout")
@@ -104,19 +122,8 @@ def manager():
     """
     Routing to manager's page
     """
-    if ("user" in session) and (session["position"] == "manager") :
+    if ("user" in session) and (session["position"] == "manager"):
         return render_template("manager.html")
-    else:
-        return redirect(url_for("login"))
-
-
-@app.route("/engineer", methods=["GET"])
-def engineer():
-    """
-    Routing to engineer's page
-    """
-    if ("user" in session) and (session["position"] == "engineer"):
-        return render_template("engineer.html")
     else:
         return redirect(url_for("login"))
 
