@@ -6,6 +6,7 @@ from passlib.hash import sha256_crypt
 from admin import adminbp
 from engineer import engineerbp
 
+# Credentials for main database
 HOST = "34.87.252.156"
 USER = "root"
 PASSWORD = "abc123"
@@ -18,12 +19,25 @@ app.register_blueprint(engineerbp, url_prefix="/engineer")
 app.config["SQLALCHEMY_DATABASE_URI"] = "mysql://{}:{}@{}/{}".format(USER, PASSWORD, HOST, DATABASE)
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.secret_key = "secretKey"
+app.config["SQLALCHEMY_BINDS"] = {
+    "user": "mysql://root:duy298@34.126.127.197/carshare_iot_system"
+}
+
+app.config["GOOGLEMAPS_KEY"] = "AIzaSyABKJGRjiU6RQMSDO46ZJeEoZkrtSWah_E"
+
 
 db = SQLAlchemy(app)
 googlemaps = GoogleMaps(app)
 
 
 class Executive(db.Model):
+    """
+    Represent the Executive table of remote database
+
+    This is used to store the login credentials and position
+    information of all registered executives. These data helps
+    the process of logging in to the system as an executive.
+    """
     __tablename__ = "Executive"
     username = db.Column(db.String(100), primary_key=True)
     password = db.Column(db.String(100))
@@ -36,6 +50,9 @@ class Executive(db.Model):
 
 
 class ReportedCar(db.Model):
+    """
+    Represent the ReportedCar table of the remote database
+    """
     __tablename__ = "ReportedCar"
     id = db.Column(db.Integer, primary_key=True)
     location = db.Column(db.String(200))
@@ -46,6 +63,21 @@ class ReportedCar(db.Model):
         self.location = location
         self.latitude = latitude
         self.longitude = longitude
+
+
+class Customer(db.Model):
+    __tablename__ = "Customer"
+    __bind_key__ = "user"
+    CustomerID = db.Column(db.Integer, nullable=False, primary_key=True)
+    username = db.Column(db.Text, nullable=False)
+    password = db.Column(db.Text, nullable=False)
+    Name = db.Column(db.Text, nullable=False)
+    address = db.Column(db.Text)
+    phone = db.Column(db.Text)
+    fax = db.Column(db.Text)
+    email = db.Column(db.Text)
+    contact = db.Column(db.Text)
+
 
 @app.route("/", methods=["POST", "GET"])
 @app.route("/login", methods=["POST", "GET"])
@@ -65,7 +97,7 @@ def login():
                     if executive.position == "admin":
                         return redirect(url_for("adminbp.adminHome"))
                     elif executive.position == "manager":
-                        return "manager"
+                        return render_template("manager.html")
                     elif executive.position == "engineer":
                         return redirect(url_for("engineerbp.engineerHome"))
                 else:
@@ -83,7 +115,7 @@ def login():
             return redirect(url_for("adminbp.adminHome"))
         elif session["position"] == "manager":
             flash("You are already logged in as manager")
-            return "manager"
+            return render_template("manager.html")
         elif session["position"] == "engineer":
             flash("You are already logged in as engineer")
             return redirect(url_for("engineerbp.engineerHome"))
@@ -122,12 +154,12 @@ def manager():
     """
     Routing to manager's page
     """
-    if ("user" in session) and (session["position"] == "manager"):
+    if ("user" in session) and (session["position"] == "manager") :
         return render_template("manager.html")
     else:
         return redirect(url_for("login"))
 
 
 if __name__ == '__main__':
-    db.create_all()
+    db.create_all(bind=None)
     app.run(debug=True)
