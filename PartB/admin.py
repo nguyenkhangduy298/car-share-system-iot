@@ -70,3 +70,40 @@ def sendEmail():
             return render_template("report.html")
     else:
         return redirect(url_for("login"))
+
+@adminbp.route("/searchcustomer", methods=["GET", "POST"])
+def searchCustomer():
+    if ("user" in session) and (session["position"] == "admin"):
+        from main import Customer
+        if request.method == "POST":
+            try:
+                customer_list = Customer.query.filter(
+                    Customer.CustomerID.like("%{}%".format(request.form["id"])),
+                    Customer.username.like("%{}%".format(request.form["username"])),
+                    Customer.Name.like("%{}%".format(request.form["name"])),
+                    Customer.address.like("%{}%".format(request.form["address"])),
+                    Customer.phone.like("%{}%".format(request.form["phone"])),
+                    Customer.fax.like("%{}%".format(request.form["fax"])),
+                    Customer.email.like("%{}%".format(request.form["email"])),
+                    Customer.contact.like("%{}%".format(request.form["contact"]))
+                ).all()
+                result = ""
+                for customer in customer_list:
+                    print(customer.Name)
+                    result = result + "{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t\n".format(customer.CustomerID,
+                                                                                    customer.username,
+                                                                                    customer.Name,
+                                                                                    customer.address,
+                                                                                    customer.phone,
+                                                                                    customer.fax,
+                                                                                    customer.email,
+                                                                                    customer.contact)
+                return result
+            except (IndexError):
+                flash("Cannot find any matching results")
+                return redirect(url_for("adminbp.searchCustomer"))
+
+        else:
+            return render_template("search_customer.html")
+    else:
+        return redirect(url_for("login"))
