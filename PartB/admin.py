@@ -78,7 +78,6 @@ def searchCustomer():
     if ("user" in session) and (session["position"] == "admin"):
         from main import Customer
         if request.method == "POST":
-            try:
                 customer_list = Customer.query.filter(
                     Customer.CustomerID.like("%{}%".format(request.form["id"])),
                     Customer.username.like("%{}%".format(request.form["username"])),
@@ -89,9 +88,10 @@ def searchCustomer():
                     Customer.email.like("%{}%".format(request.form["email"])),
                     Customer.contact.like("%{}%".format(request.form["contact"]))
                 ).all()
-                result = ""
-                for customer in customer_list:
-                    result = result + "{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t <br>".format(customer.CustomerID,
+                if len(customer_list) > 0:
+                    result = ""
+                    for customer in customer_list:
+                        result = result + "{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t <br>".format(customer.CustomerID,
                                                                                     customer.username,
                                                                                     customer.Name,
                                                                                     customer.address,
@@ -99,10 +99,10 @@ def searchCustomer():
                                                                                     customer.fax,
                                                                                     customer.email,
                                                                                     customer.contact)
-                return result
-            except (IndexError):
-                flash("Cannot find any matching results")
-                return redirect(url_for("adminbp.searchCustomer"))
+                    return result
+                else:
+                    flash("Cannot find matching result")
+                    return redirect(url_for("adminbp.searchCustomer"))
         else:
             return render_template("search_customer.html")
     else:
@@ -143,7 +143,6 @@ def searchCar():
     if ("user" in session) and (session["position"] == "admin"):
         from main import Car
         if request.method == "POST":
-            try:
                 car_list = Car.query.filter(
                     Car.CarID.like("%{}%".format(request.form["id"])),
                     Car.status.like("%{}%".format(request.form["status"])),
@@ -158,9 +157,10 @@ def searchCar():
                     Car.location.like("%{}%".format(request.form["location"])),
                     Car.CustomerID.like("%{}%".format(request.form["customer"]))
                 ).all()
-                result = ""
-                for car in car_list:
-                    result = result + "{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t <br>".format(car.CarID,
+                if len(car_list) > 0:
+                    result = ""
+                    for car in car_list:
+                        result = result + "{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t <br>".format(car.CarID,
                                                                                                         car.status,
                                                                                                         car.Name,
                                                                                                         car.model,
@@ -173,11 +173,10 @@ def searchCar():
                                                                                                         car.cost_per_hour,
                                                                                                         car.location,
                                                                                                         car.CustomerID)
-
-                return result
-            except (IndexError):
-                flash("Cannot find any matching results")
-                return redirect(url_for("adminbp.searchCar"))
+                    return result
+                else:
+                    flash("Cannot find any matching results")
+                    return redirect(url_for("adminbp.searchCar"))
         else:
             return render_template("search_car.html")
     else:
