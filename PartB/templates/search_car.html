@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}Search car{% endblock %}
+
+{% block content %}
+<h3>Fill in the box by which you want to search the car</h3>
+<form action="" method="POST">
+    <p>CarID: <input type="number" name="id"></p>
+    <p>Status: <input type="text" name="status"></p>
+    <p>Name: <input type="text" name="name"></p>
+    <p>Model: <input type="text" name="model"></p>
+    <p>Brand: <input type="text" name="brand"></p>
+    <p>Company: <input type="text" name="company"></p>
+    <p>Colour: <input type="text" name="colour"></p>
+    <p>Seats: <input type="number" name="seat"></p>
+    <p>Category: <input type="text" name="category"></p>
+    <p>Cost per hour: <input type="number" name="cost"></p>
+    <p>Location: <input type="text" name="location"></p>
+    <p>CustomerID: <input type="number" name="customer"></p>
+    <p><input type="submit" name="Submit"></p>
+</form>
+{% endblock %}
