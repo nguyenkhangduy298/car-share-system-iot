@@ -79,6 +79,24 @@ class Customer(db.Model):
     contact = db.Column(db.Text)
 
 
+class Car(db.Model):
+    __tablename__ = "Car"
+    __bind_key__ = "user"
+    CarID = db.Column(db.Integer, nullable=False, primary_key=True)
+    status = db.Column(db.Text)
+    Name = db.Column(db.Text, nullable=False)
+    model = db.Column(db.Text)
+    brand = db.Column(db.Text)
+    company = db.Column(db.Text)
+    colour = db.Column(db.Text)
+    seats = db.Column(db.Integer)
+    description = db.Column(db.Text)
+    category = db.Column(db.Text)
+    cost_per_hour = db.Column(db.Float(precision=53), nullable=False)
+    location = db.Column(db.Text)
+    CustomerID = db.Column(db.Integer)
+
+
 @app.route("/", methods=["POST", "GET"])
 @app.route("/login", methods=["POST", "GET"])
 def login():
