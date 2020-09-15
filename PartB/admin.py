@@ -18,7 +18,7 @@ def adminHome():
         return redirect(url_for("login"))
 
 
-@adminbp.route("/send", methods=["GET","POST"])
+@adminbp.route("/send", methods=["GET", "POST"])
 def sendEmail():
     """
     Send email to engineers when admin report a car
@@ -127,12 +127,38 @@ def removeCustomer():
             if customer is not None:
                 db.session.delete(customer)
                 db.session.commit()
+                flash("Removed successfully from the database")
+                return redirect(url_for("adminbp.removeCustomer"))
             else:
                 flash("Cannot find matching customer")
                 return redirect(url_for("adminbp.removeCustomer"))
         else:
             return render_template("remove_customer.html")
         
+    else:
+        return redirect(url_for("login"))
+
+
+@adminbp.route("/addcustomer", methods=["GET", "POST"])
+def addCustomer():
+    if ("user" in session) and (session["position"] == "admin"):
+        if request.method == "POST":
+            from main import Customer, db
+            username = request.form["username"]
+            password = request.form["password"]
+            name = request.form["name"]
+            address = request.form["address"]
+            phone = request.form["phone"]
+            fax = request.form["fax"]
+            email = request.form["email"]
+            contact = request.form["contact"]
+            customer = Customer(username, password, name, address, phone, fax, email, contact)
+            db.session.add(customer)
+            db.session.commit()
+            flash("New customer added successfully")
+            return redirect(url_for("adminbp.addCustomer"))
+        else:
+            return render_template("add_customer.html")
     else:
         return redirect(url_for("login"))
 
@@ -201,10 +227,40 @@ def removeCar():
             if car is not None:
                 db.session.delete(car)
                 db.session.commit()
+                flash("Removed successfully from the database")
+                return redirect(url_for("adminbp.removeCar"))
             else:
                 flash("Cannot find matching car")
                 return redirect(url_for("adminbp.removeCar"))
         else:
             return render_template("remove_car.html")
+    else:
+        return redirect(url_for("login"))
+
+
+@adminbp.route("/addcar", methods=["GET", "POST"])
+def addCar():
+    if ("user" in session) and (session["position"] == "admin"):
+        if request.method == "POST":
+            from main import Car, db
+            status = request.form["status"]
+            name = request.form["name"]
+            model = request.form["model"]
+            brand = request.form["brand"]
+            company = request.form["company"]
+            colour = request.form["colour"]
+            seats = request.form["seats"]
+            description = request.form["description"]
+            category = request.form["category"]
+            cost = request.form["cost"]
+            location = request.form["location"]
+            customer_id = request.form["customer"]
+            car = Car(status, name, model, brand, company, colour, seats, description, category, cost, location, customer_id)
+            db.session.add(car)
+            db.session.commit()
+            flash("New car added successfully")
+            return redirect(url_for("adminbp.addCar"))
+        else:
+            return render_template("add_car.html")
     else:
         return redirect(url_for("login"))
