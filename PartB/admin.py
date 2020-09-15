@@ -163,6 +163,36 @@ def addCustomer():
         return redirect(url_for("login"))
 
 
+@adminbp.route("/modifycustomer", methods=["GET", "POST"])
+def modifyCustomer():
+    if ("user" in session) and (session["position"] == "admin"):
+        if request.method == "POST":
+            try:
+                from main import db
+                customer_id = request.form["id"]
+                customer = searchCustomerById(customer_id)
+                # Update information
+                customer.username = request.form["username"]
+                customer.password = request.form["password"]
+                customer.Name = request.form["name"]
+                customer.address = request.form["address"]
+                customer.phone = request.form["phone"]
+                customer.fax = request.form["fax"]
+                customer.email = request.form["email"]
+                customer.contact = request.form["contact"]
+
+                db.session.commit()
+                flash("Information updated successfully")
+                return redirect(url_for("adminbp.modifyCustomer"))
+            except(AttributeError):
+                flash("Cannot find the customer with given ID")
+                return redirect(url_for("adminbp.modifyCustomer"))
+        else:
+            return render_template("modify_customer.html")
+    else:
+        return redirect(url_for("login"))
+
+
 # Car CRUD
 @adminbp.route("/searchcar", methods=["GET", "POST"])
 def searchCar():
@@ -262,5 +292,39 @@ def addCar():
             return redirect(url_for("adminbp.addCar"))
         else:
             return render_template("add_car.html")
+    else:
+        return redirect(url_for("login"))
+
+
+@adminbp.route("/modifycar", methods=["GET", "POST"])
+def modifyCar():
+    if ("user" in session) and (session["position"] == "admin"):
+        if request.method == "POST":
+            try:
+                from main import db
+                car_id = request.form["id"]
+                car = searchCarById(car_id)
+                # Update information
+                car.status = request.form["status"]
+                car.Name = request.form["name"]
+                car.model = request.form["model"]
+                car.brand = request.form["brand"]
+                car.company = request.form["name"]
+                car.colour = request.form["colour"]
+                car.seats = request.form["seats"]
+                car.description = request.form["description"]
+                car.category = request.form["category"]
+                car.cost_per_hour = request.form["cost"]
+                car.location = request.form["location"]
+                car.CustomerID = request.form["customer"]
+
+                db.session.commit()
+                flash("Information updated successfully")
+                return redirect(url_for("adminbp.modifyCar"))
+            except (AttributeError):
+                flash("Cannot find the car with given ID")
+                return redirect(url_for("adminbp.modifyCar"))
+        else:
+            return render_template("modify_car.html")
     else:
         return redirect(url_for("login"))
