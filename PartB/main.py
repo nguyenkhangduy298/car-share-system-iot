@@ -78,6 +78,16 @@ class Customer(db.Model):
     email = db.Column(db.Text)
     contact = db.Column(db.Text)
 
+    def __init__(self, username, password, Name, address, phone, fax, email, contact):
+        self.username = username
+        self.password = password
+        self.Name = Name
+        self.address = address
+        self.phone = phone
+        self.fax = fax
+        self.email = email
+        self.contact = contact
+
 
 class Car(db.Model):
     __tablename__ = "Car"
@@ -95,6 +105,20 @@ class Car(db.Model):
     cost_per_hour = db.Column(db.Float(precision=53), nullable=False)
     location = db.Column(db.Text)
     CustomerID = db.Column(db.Integer)
+
+    def __init__(self, status, Name, model, brand, company, colour, seats, description, category, cost_per_hour, location, CustomerID):
+        self.status = status
+        self.Name = Name
+        self.model = model
+        self.brand = brand
+        self.company = company
+        self.colour = colour
+        self.seats = seats
+        self.description = description
+        self.category = category
+        self.cost_per_hour = cost_per_hour
+        self.location = location
+        self.CustomerID = CustomerID
 
 
 @app.route("/", methods=["POST", "GET"])
