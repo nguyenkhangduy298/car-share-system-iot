@@ -1,330 +1,203 @@
-from flask import Blueprint, render_template, session, redirect, url_for, request, flash
-from email.mime.text import MIMEText
-from geopy.geocoders import Nominatim
-import smtplib
-import ssl
+from flask import Flask, render_template, request, flash, redirect, url_for, session
+from flask_sqlalchemy import SQLAlchemy
+from flask_googlemaps import GoogleMaps
+from passlib.hash import sha256_crypt
 
-adminbp = Blueprint("adminbp", __name__, template_folder="templates")
+from admin import adminbp
+from engineer import engineerbp
+
+# Credentials for main database
+HOST = "34.126.127.197"
+USER = "root"
+PASSWORD = "duy298"
+DATABASE = "carshare_iot_system"
+
+app = Flask(__name__)
+app.register_blueprint(adminbp, url_prefix="/admin")
+app.register_blueprint(engineerbp, url_prefix="/engineer")
+
+app.config["SQLALCHEMY_DATABASE_URI"] = "mysql://{}:{}@{}/{}".format(USER, PASSWORD, HOST, DATABASE)
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+app.secret_key = "secretKey"
+
+app.config["GOOGLEMAPS_KEY"] = "AIzaSyABKJGRjiU6RQMSDO46ZJeEoZkrtSWah_E"
 
 
-@adminbp.route("/", methods=["GET"])
-def adminHome():
+db = SQLAlchemy(app)
+googlemaps = GoogleMaps(app)
+
+
+class Login(db.Model):
     """
-    Routing to admin's page
+    Represent the Executive table of remote database
+
+    This is used to store the login credentials and position
+    information of all registered executives. These data helps
+    the process of logging in to the system as an executive.
     """
-    if ("user" in session) and (session["position"] == "admin"):
-        return render_template("admin.html")
-    else:
-        return redirect(url_for("login"))
+    __tablename__ = "Login"
+    ID = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(100))
+    password = db.Column(db.String(100))
+    position = db.Column(db.String(100))
+
+    def __init__(self, username, password, position):
+        self.username = username
+        self.password = password
+        self.position = position
 
 
-@adminbp.route("/report", methods=["GET", "POST"])
-def sendEmail():
+class ReportedCar(db.Model):
     """
-    Send email to engineers when admin report a car
+    Represent the ReportedCar table of the remote database
     """
-    if ("user" in session) and (session["position"] == "admin"):
-        from main import ReportedCar, db
+    __tablename__ = "ReportedCar"
+    ID = db.Column(db.Integer, primary_key=True)
+    location = db.Column(db.String(200))
+    latitude = db.Column(db.Float)
+    longitude = db.Column(db.Float)
 
+    def __init__(self, location, latitude, longitude):
+        self.location = location
+        self.latitude = latitude
+        self.longitude = longitude
+
+
+class Customer(db.Model):
+    __tablename__ = "Customer"
+    CustomerID = db.Column(db.Integer, nullable=False, primary_key=True)
+    username = db.Column(db.Text, nullable=False)
+    password = db.Column(db.Text, nullable=False)
+    Name = db.Column(db.Text, nullable=False)
+    address = db.Column(db.Text)
+    phone = db.Column(db.Text)
+    fax = db.Column(db.Text)
+    email = db.Column(db.Text)
+    contact = db.Column(db.Text)
+
+    def __init__(self, username, password, Name, address, phone, fax, email, contact):
+        self.username = username
+        self.password = password
+        self.Name = Name
+        self.address = address
+        self.phone = phone
+        self.fax = fax
+        self.email = email
+        self.contact = contact
+
+
+class Car(db.Model):
+    __tablename__ = "Car"
+    CarID = db.Column(db.Integer, nullable=False, primary_key=True)
+    status = db.Column(db.Text)
+    Name = db.Column(db.Text, nullable=False)
+    model = db.Column(db.Text)
+    brand = db.Column(db.Text)
+    company = db.Column(db.Text)
+    colour = db.Column(db.Text)
+    seats = db.Column(db.Integer)
+    description = db.Column(db.Text)
+    category = db.Column(db.Text)
+    cost_per_hour = db.Column(db.Float(precision=53), nullable=False)
+    location = db.Column(db.Text)
+    CustomerID = db.Column(db.Integer)
+
+    def __init__(self, status, Name, model, brand, company, colour, seats, description, category, cost_per_hour, location, CustomerID):
+        self.status = status
+        self.Name = Name
+        self.model = model
+        self.brand = brand
+        self.company = company
+        self.colour = colour
+        self.seats = seats
+        self.description = description
+        self.category = category
+        self.cost_per_hour = cost_per_hour
+        self.location = location
+        self.CustomerID = CustomerID
+
+
+@app.route("/", methods=["POST", "GET"])
+@app.route("/login", methods=["POST", "GET"])
+def login():
+    """
+    Routing to login page for executive
+    """
+    if "user" not in session:
         if request.method == "POST":
-            # Email configuration
-            port = 587
-            smtp_server = "smtp.office365.com"
-            receivers = ["s3694615@rmit.edu.vn", "dkhoilaska@gmail.com"]
-            sender = request.form["email"]
+            username = request.form["name"]
             password = request.form["password"]
-            location = request.form["location"]
-
-            # Use geopy library to get location latitude, longitude
             try:
-                geolocator = Nominatim(user_agent="app")
-                place = geolocator.geocode(location)
-                car_location = ReportedCar(location, place.latitude, place.longitude)
-                db.session.add(car_location)
-            except (AttributeError):
-                flash("Cannot find the specified location")
-                return redirect(url_for("adminbp.sendEmail"))
-
-            # Compose email
-            message = "Car needs maintenance at: " + location + "\n(" + place.address + ")"
-            mail = MIMEText(message)
-            mail["Subject"] = "Testing message"
-            mail["To"] = ", ".join(receivers)
-
-            # Send email
-            try:
-                context = ssl.create_default_context()
-                with smtplib.SMTP(smtp_server, port) as server:
-                    server.ehlo()
-                    server.starttls(context=context)
-                    server.login(sender, password)
-
-                    db.session.commit()  # Only store to database when login successfully
-                    server.sendmail(sender, receivers, mail.as_string())
-            except (smtplib.SMTPAuthenticationError):
-                flash("Wrong username or password")
-                return redirect(url_for("adminbp.sendEmail"))
-            flash("Emails are sent to engineers")
-            return redirect(url_for("adminbp.sendEmail"))
-        else:
-            return render_template("report.html")
-    else:
-        return redirect(url_for("login"))
-
-
-# Customer CRUD
-@adminbp.route("/searchcustomer", methods=["GET", "POST"])
-def searchCustomer():
-    if ("user" in session) and (session["position"] == "admin"):
-        from main import Customer
-        if request.method == "POST":
-                customer_list = Customer.query.filter(
-                    Customer.CustomerID.like("%{}%".format(request.form["id"])),
-                    Customer.username.like("%{}%".format(request.form["username"])),
-                    Customer.Name.like("%{}%".format(request.form["name"])),
-                    Customer.address.like("%{}%".format(request.form["address"])),
-                    Customer.phone.like("%{}%".format(request.form["phone"])),
-                    Customer.fax.like("%{}%".format(request.form["fax"])),
-                    Customer.email.like("%{}%".format(request.form["email"])),
-                    Customer.contact.like("%{}%".format(request.form["contact"]))
-                ).all()
-                if len(customer_list) > 0:
-                    result = ""
-                    for customer in customer_list:
-                        result = result + "{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t <br>".format(customer.CustomerID,
-                                                                                    customer.username,
-                                                                                    customer.Name,
-                                                                                    customer.address,
-                                                                                    customer.phone,
-                                                                                    customer.fax,
-                                                                                    customer.email,
-                                                                                    customer.contact)
-                    return result
+                login = Login.query.filter_by(username=username).first()
+                if (sha256_crypt.verify(password, login.password)):
+                    session["user"] = login.username
+                    session["position"] = login.position
+                    if login.position == "admin":
+                        return redirect(url_for("adminbp.adminHome"))
+                    elif login.position == "manager":
+                        return render_template("manager.html")
+                    elif login.position == "engineer":
+                        return redirect(url_for("engineerbp.engineerHome"))
                 else:
-                    flash("Cannot find matching result")
-                    return redirect(url_for("adminbp.searchCustomer"))
-        else:
-            return render_template("search_customer.html")
-    else:
-        return redirect(url_for("login"))
-
-
-def searchCustomerById(customer_id):
-    from main import Customer
-    customer = Customer.query.filter_by(
-        CustomerID=customer_id
-    ).first()
-    return customer
-
-
-@adminbp.route("/removecustomer", methods=["GET", "POST"])
-def removeCustomer():
-    if ("user" in session) and (session["position"] == "admin"):
-        if request.method == "POST":
-            from main import Customer, db
-            customer_id = request.form["id"]
-            customer = searchCustomerById(customer_id)
-            if customer is not None:
-                db.session.delete(customer)
-                db.session.commit()
-                flash("Removed successfully from the database")
-                return redirect(url_for("adminbp.removeCustomer"))
-            else:
-                flash("Cannot find matching customer")
-                return redirect(url_for("adminbp.removeCustomer"))
-        else:
-            return render_template("remove_customer.html")
-        
-    else:
-        return redirect(url_for("login"))
-
-
-@adminbp.route("/addcustomer", methods=["GET", "POST"])
-def addCustomer():
-    if ("user" in session) and (session["position"] == "admin"):
-        if request.method == "POST":
-            from main import Customer, db
-            username = request.form["username"]
-            password = request.form["password"]
-            name = request.form["name"]
-            address = request.form["address"]
-            phone = request.form["phone"]
-            fax = request.form["fax"]
-            email = request.form["email"]
-            contact = request.form["contact"]
-            customer = Customer(username, password, name, address, phone, fax, email, contact)
-            db.session.add(customer)
-            db.session.commit()
-            flash("New customer added successfully")
-            return redirect(url_for("adminbp.addCustomer"))
-        else:
-            return render_template("add_customer.html")
-    else:
-        return redirect(url_for("login"))
-
-
-@adminbp.route("/modifycustomer", methods=["GET", "POST"])
-def modifyCustomer():
-    if ("user" in session) and (session["position"] == "admin"):
-        if request.method == "POST":
-            try:
-                from main import db
-                customer_id = request.form["id"]
-                customer = searchCustomerById(customer_id)
-                # Update information
-                customer.username = request.form["username"]
-                customer.password = request.form["password"]
-                customer.Name = request.form["name"]
-                customer.address = request.form["address"]
-                customer.phone = request.form["phone"]
-                customer.fax = request.form["fax"]
-                customer.email = request.form["email"]
-                customer.contact = request.form["contact"]
-
-                db.session.commit()
-                flash("Information updated successfully")
-                return redirect(url_for("adminbp.modifyCustomer"))
-            except(AttributeError):
-                flash("Cannot find the customer with given ID")
-                return redirect(url_for("adminbp.modifyCustomer"))
-        else:
-            return render_template("modify_customer.html")
-    else:
-        return redirect(url_for("login"))
-
-
-# Car CRUD
-@adminbp.route("/searchcar", methods=["GET", "POST"])
-def searchCar():
-    if ("user" in session) and (session["position"] == "admin"):
-        from main import Car
-        if request.method == "POST":
-                car_list = Car.query.filter(
-                    Car.CarID.like("%{}%".format(request.form["id"])),
-                    Car.status.like("%{}%".format(request.form["status"])),
-                    Car.Name.like("%{}%".format(request.form["name"])),
-                    Car.model.like("%{}%".format(request.form["model"])),
-                    Car.brand.like("%{}%".format(request.form["brand"])),
-                    Car.company.like("%{}%".format(request.form["company"])),
-                    Car.colour.like("%{}%".format(request.form["colour"])),
-                    Car.seats.like("%{}%".format(request.form["seat"])),
-                    Car.category.like("%{}%".format(request.form["category"])),
-                    Car.cost_per_hour.like("%{}%".format(request.form["cost"])),
-                    Car.location.like("%{}%".format(request.form["location"])),
-                    Car.CustomerID.like("%{}%".format(request.form["customer"]))
-                ).all()
-                if len(car_list) > 0:
-                    result = ""
-                    for car in car_list:
-                        result = result + "{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t <br>".format(car.CarID,
-                                                                                                        car.status,
-                                                                                                        car.Name,
-                                                                                                        car.model,
-                                                                                                        car.brand,
-                                                                                                        car.company,
-                                                                                                        car.colour,
-                                                                                                        car.seats,
-                                                                                                        car.description,
-                                                                                                        car.category,
-                                                                                                        car.cost_per_hour,
-                                                                                                        car.location,
-                                                                                                        car.CustomerID)
-                    return result
-                else:
-                    flash("Cannot find any matching results")
-                    return redirect(url_for("adminbp.searchCar"))
-        else:
-            return render_template("search_car.html")
-    else:
-        return redirect(url_for("login"))
-
-
-def searchCarById(car_id):
-    from main import Car
-    car = Car.query.filter_by(
-        CarID=car_id
-    ).first()
-    return car
-
-
-@adminbp.route("/removecar", methods=["GET", "POST"])
-def removeCar():
-    if ("user" in session) and (session["position"] == "admin"):
-        if request.method == "POST":
-            from main import Car, db
-            car_id = request.form["id"]
-            car = searchCarById(car_id)
-            if car is not None:
-                db.session.delete(car)
-                db.session.commit()
-                flash("Removed successfully from the database")
-                return redirect(url_for("adminbp.removeCar"))
-            else:
-                flash("Cannot find matching car")
-                return redirect(url_for("adminbp.removeCar"))
-        else:
-            return render_template("remove_car.html")
-    else:
-        return redirect(url_for("login"))
-
-
-@adminbp.route("/addcar", methods=["GET", "POST"])
-def addCar():
-    if ("user" in session) and (session["position"] == "admin"):
-        if request.method == "POST":
-            from main import Car, db
-            status = request.form["status"]
-            name = request.form["name"]
-            model = request.form["model"]
-            brand = request.form["brand"]
-            company = request.form["company"]
-            colour = request.form["colour"]
-            seats = request.form["seats"]
-            description = request.form["description"]
-            category = request.form["category"]
-            cost = request.form["cost"]
-            location = request.form["location"]
-            customer_id = request.form["customer"]
-            car = Car(status, name, model, brand, company, colour, seats, description, category, cost, location, customer_id)
-            db.session.add(car)
-            db.session.commit()
-            flash("New car added successfully")
-            return redirect(url_for("adminbp.addCar"))
-        else:
-            return render_template("add_car.html")
-    else:
-        return redirect(url_for("login"))
-
-
-@adminbp.route("/modifycar", methods=["GET", "POST"])
-def modifyCar():
-    if ("user" in session) and (session["position"] == "admin"):
-        if request.method == "POST":
-            try:
-                from main import db
-                car_id = request.form["id"]
-                car = searchCarById(car_id)
-                # Update information
-                car.status = request.form["status"]
-                car.Name = request.form["name"]
-                car.model = request.form["model"]
-                car.brand = request.form["brand"]
-                car.company = request.form["name"]
-                car.colour = request.form["colour"]
-                car.seats = request.form["seats"]
-                car.description = request.form["description"]
-                car.category = request.form["category"]
-                car.cost_per_hour = request.form["cost"]
-                car.location = request.form["location"]
-                car.CustomerID = request.form["customer"]
-
-                db.session.commit()
-                flash("Information updated successfully")
-                return redirect(url_for("adminbp.modifyCar"))
+                    flash("Wrong password!")
+                    return render_template("login.html")
             except (AttributeError):
-                flash("Cannot find the car with given ID")
-                return redirect(url_for("adminbp.modifyCar"))
+                flash("Cannot find user! Try again")
+                return render_template("login.html")
+
         else:
-            return render_template("modify_car.html")
+            return render_template("login.html")
+    else:
+        if session["position"] == "admin":
+            flash("You are already logged in as admin")
+            return redirect(url_for("adminbp.adminHome"))
+        elif session["position"] == "manager":
+            flash("You are already logged in as manager")
+            return render_template("manager.html")
+        elif session["position"] == "engineer":
+            flash("You are already logged in as engineer")
+            return redirect(url_for("engineerbp.engineerHome"))
+
+
+@app.route("/logout")
+def logout():
+    """
+    Log out from current session user
+    """
+    session.pop("user", None)
+    return redirect(url_for("login"))
+
+
+@app.route("/registerexec", methods=["POST", "GET"])
+def register():
+    """
+    Routing to page for registering executive account
+    """
+    if request.method == "POST":
+        username = request.form["name"]
+        password = request.form["password"]
+        hashed_password = sha256_crypt.hash(password)
+        position = request.form["position"]
+        login = Login(username, hashed_password, position)
+        db.session.add(login)
+        db.session.commit()
+        flash("Registered successfully")
+        return redirect("login")
+    else:
+        return render_template("register.html")
+
+
+@app.route("/manager", methods=["GET"])
+def manager():
+    """
+    Routing to manager's page
+    """
+    if ("user" in session) and (session["position"] == "manager") :
+        return render_template("manager.html")
     else:
         return redirect(url_for("login"))
+
+
+if __name__ == '__main__':
+    db.create_all()
+    app.run(debug=True)
