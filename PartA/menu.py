@@ -5,6 +5,7 @@ class Menu:
         with DatabaseUtils() as db:
             db.createCustomerTable()
             db.createCarTable()
+            db.createBookHistoryTable()
             print(db.getCustomer())
 
         self.runMenu()

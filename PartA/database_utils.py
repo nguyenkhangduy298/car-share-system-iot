@@ -48,6 +48,19 @@ class DatabaseUtils:
         self.connection.commit()
         # constraint FK_Car FOREIGN KEY(CustomerID) REFERENCES Customer(CustomerID))
 
+    def createBookHistoryTable(self):
+        with self.connection.cursor() as cursor:
+            cursor.execute("""
+                   create table if not exists BookHistory (
+                       HistoryId int not null auto_increment,
+                       status text,
+                       CarID int, CustomerID int,
+                       bookTime DATE , endTime DATE,
+                       constraint PK_History primary key (HistoryID)
+                       )""")
+        self.connection.commit()
+        # constraint FK_Car FOREIGN KEY(CustomerID) REFERENCES Customer(CustomerID))
+
     def getCustomer(self):
         print("GET CUSTOMER")
         with self.connection.cursor() as cursor:
@@ -79,3 +92,4 @@ class DatabaseUtils:
 # CREATE TABLE customer (id NUMERIC, name TEXT, address TEXT,phone TEXT, fax TEXT, email TEXT, contact TEXT, username TEXT, password TEXT );
 # INSERT INTO Customer VALUES(1, 'John', '70 abc street', '0908-', 'fax', 'email@', 'contact', 'username', 'password298' );
 # INSERT INTO Car VALUES('1','Available','CarA', '70 abc', '0908', 'company', 'red', '4', 'Description', 'Category','40.20','Location','1' );
+# INSERT INTO BookHistory VALUES('1','Booked','1','1','2020-01-01', '2020-02-02');
