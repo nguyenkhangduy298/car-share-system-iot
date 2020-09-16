@@ -87,7 +87,7 @@ class Customer(db.Model):
 
 
 class Car(db.Model):
-    __tablename__ = "Car"
+    __tablename__ = "Car";
     CarID = db.Column(db.Integer, nullable=False, primary_key=True)
     status = db.Column(db.Text)
     Name = db.Column(db.Text, nullable=False)
