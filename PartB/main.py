@@ -30,7 +30,7 @@ db = SQLAlchemy(app)
 googlemaps = GoogleMaps(app)
 
 
-class Executive(db.Model):
+class Login(db.Model):
     """
     Represent the Executive table of remote database
 
@@ -38,8 +38,10 @@ class Executive(db.Model):
     information of all registered executives. These data helps
     the process of logging in to the system as an executive.
     """
-    __tablename__ = "Executive"
-    username = db.Column(db.String(100), primary_key=True)
+    __tablename__ = "Login"
+    __bind_key__ = "user"
+    ID = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(100))
     password = db.Column(db.String(100))
     position = db.Column(db.String(100))
 
@@ -132,15 +134,15 @@ def login():
             username = request.form["name"]
             password = request.form["password"]
             try:
-                executive = Executive.query.filter_by(username=username).first()
-                if (sha256_crypt.verify(password, executive.password)):
-                    session["user"] = executive.username
-                    session["position"] = executive.position
-                    if executive.position == "admin":
+                login = Login.query.filter_by(username=username).first()
+                if (sha256_crypt.verify(password, login.password)):
+                    session["user"] = login.username
+                    session["position"] = login.position
+                    if login.position == "admin":
                         return redirect(url_for("adminbp.adminHome"))
-                    elif executive.position == "manager":
+                    elif login.position == "manager":
                         return render_template("manager.html")
-                    elif executive.position == "engineer":
+                    elif login.position == "engineer":
                         return redirect(url_for("engineerbp.engineerHome"))
                 else:
                     flash("Wrong password!")
@@ -182,8 +184,8 @@ def register():
         password = request.form["password"]
         hashed_password = sha256_crypt.hash(password)
         position = request.form["position"]
-        executive = Executive(username, hashed_password, position)
-        db.session.add(executive)
+        login = Login(username, hashed_password, position)
+        db.session.add(login)
         db.session.commit()
         flash("Registered successfully")
         return redirect("login")
@@ -203,5 +205,5 @@ def manager():
 
 
 if __name__ == '__main__':
-    db.create_all(bind=None)
+    db.create_all()
     app.run(debug=True)
