@@ -118,13 +118,15 @@
   </div>
   
   <div class="w3-row-padding">
+    <div class="d-flex">
     <div class="w3-col m3">
       <label><i class="fa fa-calendar-o"></i> Check In</label>
       <input type="text" class="form-control" id="book_pick_date" placeholder="Date">
     </div>
     <div class="w3-col m3">
       <label><i class="fa fa-calendar-o"></i> Check Out</label>
-      <input class="w3-input w3-border" type="text" placeholder="DD MM YYYY">
+      <input type="text" class="form-control" id="book_pick_date" placeholder="Date">
+    </div>
     </div>
     <div class="w3-col m2">
       <label><i class="fa fa-male"></i> Adults</label>
@@ -146,7 +148,6 @@
       <div class="w3-container w3-white">
         <h3>Mercedes Grand Sedan</h3>
         <h6 class="w3-opacity">From $99</h6>
-        <p class="w3-large"><i class="fa fa-bath"></i> <i class="fa fa-phone"></i> <i class="fa fa-wifi"></i></p>
         <button class="w3-button w3-block w3-black w3-margin-bottom">Booking</button>
       </div>
     </div>
@@ -155,7 +156,6 @@
       <div class="w3-container w3-white">
         <h3>Range Rover</h3>
         <h6 class="w3-opacity">From $149</h6>
-        <p class="w3-large"><i class="fa fa-bath"></i> <i class="fa fa-phone"></i> <i class="fa fa-wifi"></i> <i class="fa fa-tv"></i></p>
         <button class="w3-button w3-block w3-black w3-margin-bottom">Booking</button>
       </div>
     </div>
@@ -164,7 +164,6 @@
       <div class="w3-container w3-white">
         <h3>Mercedes Grand Sedan</h3>
         <h6 class="w3-opacity">From $199</h6>
-        <p class="w3-large"><i class="fa fa-bath"></i> <i class="fa fa-phone"></i> <i class="fa fa-wifi"></i> <i class="fa fa-tv"></i> <i class="fa fa-glass"></i> <i class="fa fa-cutlery"></i></p>
         <button class="w3-button w3-block w3-black w3-margin-bottom">Booking</button>
       </div>
     </div>
@@ -177,5 +176,21 @@
         </div>
       </div>
   </div>
-
+  <script src="js/jquery.min.js"></script>
+  <script src="js/jquery-migrate-3.0.1.min.js"></script>
+  <script src="js/popper.min.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+  <script src="js/jquery.easing.1.3.js"></script>
+  <script src="js/jquery.waypoints.min.js"></script>
+  <script src="js/jquery.stellar.min.js"></script>
+  <script src="js/owl.carousel.min.js"></script>
+  <script src="js/jquery.magnific-popup.min.js"></script>
+  <script src="js/aos.js"></script>
+  <script src="js/jquery.animateNumber.min.js"></script>
+  <script src="js/bootstrap-datepicker.js"></script>
+  <script src="js/jquery.timepicker.min.js"></script>
+  <script src="js/scrollax.min.js"></script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
+  <script src="js/google-map.js"></script>
+  <script src="js/main.js"></script>
       {% endblock %}
