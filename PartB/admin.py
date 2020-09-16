@@ -18,7 +18,7 @@ def adminHome():
         return redirect(url_for("login"))
 
 
-@adminbp.route("/send", methods=["GET", "POST"])
+@adminbp.route("/report", methods=["GET", "POST"])
 def sendEmail():
     """
     Send email to engineers when admin report a car
