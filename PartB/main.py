@@ -5,6 +5,7 @@ from passlib.hash import sha256_crypt
 
 from admin import adminbp
 from engineer import engineerbp
+from customer import customerbp
 
 # Credentials for main database
 HOST = "34.126.127.197"
@@ -14,6 +15,7 @@ DATABASE = "carshare_iot_system"
 
 app = Flask(__name__)
 app.register_blueprint(adminbp, url_prefix="/admin")
+app.register_blueprint(customerbp, url_prefix="/customer")
 app.register_blueprint(engineerbp, url_prefix="/engineer")
 
 app.config["SQLALCHEMY_DATABASE_URI"] = "mysql://{}:{}@{}/{}".format(USER, PASSWORD, HOST, DATABASE)
@@ -134,6 +136,8 @@ def login():
                     session["position"] = login.position
                     if login.position == "admin":
                         return redirect(url_for("adminbp.adminHome"))
+                    elif login.position == "customer":
+                        return redirect(url_for("customerbp.customerHome"))
                     elif login.position == "manager":
                         return render_template("manager.html")
                     elif login.position == "engineer":
@@ -151,6 +155,9 @@ def login():
         if session["position"] == "admin":
             flash("You are already logged in as admin")
             return redirect(url_for("adminbp.adminHome"))
+        elif session["position"] == "customer":
+            flash("You are already logged in as customer")
+            return redirect(url_for("customerbp.customerHome"))
         elif session["position"] == "manager":
             flash("You are already logged in as manager")
             return render_template("manager.html")
