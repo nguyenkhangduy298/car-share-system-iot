@@ -20,7 +20,7 @@ app.config["SQLALCHEMY_DATABASE_URI"] = "mysql://{}:{}@{}/{}".format(USER, PASSW
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.secret_key = "secretKey"
 
-app.config["GOOGLEMAPS_KEY"] = "AIzaSyABKJGRjiU6RQMSDO46ZJeEoZkrtSWah_E"
+app.config["GOOGLEMAPS_KEY"] = "AIzaSyAguVQ25U6PQbgESlC4jxCxk-3BcYGksW4"
 
 
 db = SQLAlchemy(app)
