@@ -34,7 +34,7 @@ def viewmap():
             )
         else:
             maintenance_map = Map(
-                identifier="cluster-map",
+                identifier="view-map",
                 # RMIT latitude and longitude
                 lat=10.7294,
                 lng=106.6931
