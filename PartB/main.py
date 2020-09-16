@@ -7,10 +7,10 @@ from admin import adminbp
 from engineer import engineerbp
 
 # Credentials for main database
-HOST = "34.87.252.156"
+HOST = "34.126.127.197"
 USER = "root"
-PASSWORD = "abc123"
-DATABASE = "car_share_app"
+PASSWORD = "duy298"
+DATABASE = "carshare_iot_system"
 
 app = Flask(__name__)
 app.register_blueprint(adminbp, url_prefix="/admin")
@@ -19,9 +19,6 @@ app.register_blueprint(engineerbp, url_prefix="/engineer")
 app.config["SQLALCHEMY_DATABASE_URI"] = "mysql://{}:{}@{}/{}".format(USER, PASSWORD, HOST, DATABASE)
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.secret_key = "secretKey"
-app.config["SQLALCHEMY_BINDS"] = {
-    "user": "mysql://root:duy298@34.126.127.197/carshare_iot_system"
-}
 
 app.config["GOOGLEMAPS_KEY"] = "AIzaSyABKJGRjiU6RQMSDO46ZJeEoZkrtSWah_E"
 
@@ -39,7 +36,6 @@ class Login(db.Model):
     the process of logging in to the system as an executive.
     """
     __tablename__ = "Login"
-    __bind_key__ = "user"
     ID = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(100))
     password = db.Column(db.String(100))
@@ -56,7 +52,7 @@ class ReportedCar(db.Model):
     Represent the ReportedCar table of the remote database
     """
     __tablename__ = "ReportedCar"
-    id = db.Column(db.Integer, primary_key=True)
+    ID = db.Column(db.Integer, primary_key=True)
     location = db.Column(db.String(200))
     latitude = db.Column(db.Float)
     longitude = db.Column(db.Float)
@@ -69,7 +65,6 @@ class ReportedCar(db.Model):
 
 class Customer(db.Model):
     __tablename__ = "Customer"
-    __bind_key__ = "user"
     CustomerID = db.Column(db.Integer, nullable=False, primary_key=True)
     username = db.Column(db.Text, nullable=False)
     password = db.Column(db.Text, nullable=False)
@@ -93,7 +88,6 @@ class Customer(db.Model):
 
 class Car(db.Model):
     __tablename__ = "Car"
-    __bind_key__ = "user"
     CarID = db.Column(db.Integer, nullable=False, primary_key=True)
     status = db.Column(db.Text)
     Name = db.Column(db.Text, nullable=False)
