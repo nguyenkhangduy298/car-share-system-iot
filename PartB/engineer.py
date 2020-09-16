@@ -24,14 +24,21 @@ def viewmap():
     if ("user" in session) and (session["position"] == "engineer"):
         from main import googlemaps, ReportedCar
         markers = ReportedCar.query.with_entities(ReportedCar.latitude, ReportedCar.longitude).all()
-        maintenance_map = Map(
-            identifier="view-side",
-            lat=markers[0][0],
-            lng=markers[0][1],
-            markers=markers,
-            fit_markers_to_bounds=True
-        )
-        print(maintenance_map.zoom)
+        if len(markers) > 0:
+            maintenance_map = Map(
+                identifier="view-side",
+                lat=markers[0][0],
+                lng=markers[0][1],
+                markers=markers,
+                fit_markers_to_bounds=True
+            )
+        else:
+            maintenance_map = Map(
+                identifier="cluster-map",
+                # RMIT latitude and longitude
+                lat=10.7294,
+                lng=106.6931
+            )
         return render_template("map.html", maintenance_map=maintenance_map)
     else:
         return redirect(url_for("login"))
