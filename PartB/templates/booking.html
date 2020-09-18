@@ -2,25 +2,20 @@
 {% block title %} Booking {% endblock %}
 {% block content %}
 <head>
-
-
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=Edge">
     <meta name="description" content="">
     <meta name="keywords" content="">
     <meta name="author" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/font-awesome.min.css">
-    <link rel="stylesheet" href="css/owl.carousel.css">
-    <link rel="stylesheet" href="css/owl.theme.default.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/owl.theme.default.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/font-awesome.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/owl.carousel.css') }}">
 
     <!-- MAIN CSS -->
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <style>
-
-        
         .topnav {
           overflow: hidden;
           background-color: #f1f1f1;
@@ -59,7 +54,7 @@
                    <div class="courses-thumb courses-thumb-secondary">
                         <div class="courses-top">
                              <div class="courses-image">
-                                  <img src="images/product-1-720x480.jpg" class="img-responsive" alt="">
+                                  <img src="{{ url_for('static', filename='images/product-1-720x480.jpg') }}" class="img-responsive" alt="">
                              </div>
                              <div class="courses-date">
                                   <span title="passegengers"><i class="fa fa-user"></i> 5</span>
@@ -72,7 +67,7 @@
                         <div class="courses-detail">
                              <h3><a href="fleet.html">Large: Premium</a></h3>
                              <p class="lead"><small>from</small> <strong>$99</strong> <small>per weekend</small></p>
-                             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                             
                         </div>
 
                         <div class="courses-info">
@@ -85,7 +80,7 @@
                    <div class="courses-thumb courses-thumb-secondary">
                         <div class="courses-top">
                              <div class="courses-image">
-                                  <img src="images/product-2-720x480.jpg" class="img-responsive" alt="">
+                                  <img src="{{ url_for('static', filename='images/product-2-720x480.jpg') }}" class="img-responsive" alt="">
                              </div>
                              <div class="courses-date">
                                   <span title="passegengers"><i class="fa fa-user"></i> 5</span>
@@ -98,7 +93,7 @@
                         <div class="courses-detail">
                              <h3><a href="fleet.html">Large: Station wagon</a></h3>
                              <p class="lead"><small>from</small> <strong>$99</strong> <small>per weekend</small></p>
-                             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                            
                         </div>
 
                         <div class="courses-info">
@@ -111,7 +106,7 @@
                    <div class="courses-thumb courses-thumb-secondary">
                         <div class="courses-top">
                              <div class="courses-image">
-                                  <img src="images/product-3-720x480.jpg" class="img-responsive" alt="">
+                                  <img src="{{ url_for('static', filename='images/product-3-720x480.jpg') }}" class="img-responsive" alt="">
                              </div>
                              <div class="courses-date">
                                   <span title="passegengers"><i class="fa fa-user"></i> 5</span>
@@ -124,7 +119,7 @@
                         <div class="courses-detail">
                              <h3><a href="fleet.html">Medium: Low emission</a></h3>
                              <p class="lead"><small>from</small> <strong>$99</strong> <small>per weekend</small></p>
-                             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                            
                         </div>
 
                         <div class="courses-info">
@@ -137,7 +132,7 @@
                    <div class="courses-thumb courses-thumb-secondary">
                         <div class="courses-top">
                              <div class="courses-image">
-                                  <img src="images/product-4-720x480.jpg" class="img-responsive" alt="">
+                                  <img src="{{ url_for('static', filename='images/product-4-720x480.jpg') }}" class="img-responsive" alt="">
                              </div>
                              <div class="courses-date">
                                   <span title="passegengers"><i class="fa fa-user"></i> 4</span>
@@ -150,7 +145,7 @@
                         <div class="courses-detail">
                              <h3><a href="fleet.html">Small: Economy</a></h3>
                              <p class="lead"><small>from</small> <strong>$99</strong> <small>per weekend</small></p>
-                             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                             
                         </div>
 
                         <div class="courses-info">
@@ -163,7 +158,7 @@
                    <div class="courses-thumb courses-thumb-secondary">
                         <div class="courses-top">
                              <div class="courses-image">
-                                  <img src="images/product-5-720x480.jpg" class="img-responsive" alt="">
+                                  <img src="{{ url_for('static', filename='images/product-5-720x480.jpg') }}"class="img-responsive" alt="">
                              </div>
                              <div class="courses-date">
                                   <span title="passegengers"><i class="fa fa-user"></i> 2</span>
@@ -176,7 +171,7 @@
                         <div class="courses-detail">
                              <h3><a href="fleet.html">Small: Mini</a></h3>
                              <p class="lead"><small>from</small> <strong>$99</strong> <small>per weekend</small></p>
-                             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                           
                         </div>
 
                         <div class="courses-info">
@@ -189,7 +184,7 @@
                    <div class="courses-thumb courses-thumb-secondary">
                         <div class="courses-top">
                              <div class="courses-image">
-                                  <img src="images/product-6-720x480.jpg" class="img-responsive" alt="">
+                                  <img src="{{ url_for('static', filename='images/product-6-720x480.jpg') }}" class="img-responsive" alt="">
                              </div>
                              <div class="courses-date">
                                   <span title="passegengers"><i class="fa fa-user"></i> 5</span>
@@ -202,7 +197,7 @@
                         <div class="courses-detail">
                              <h3><a href="fleet.html">Large: Premium</a></h3>
                              <p class="lead"><small>from</small> <strong>$99</strong> <small>per weekend</small></p>
-                             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                         
                         </div>
 
                         <div class="courses-info">
@@ -263,9 +258,15 @@
          </div>
     </div>
 </div>
-<script src="js/jquery.js"></script>
-     <script src="js/bootstrap.min.js"></script>
-     <script src="js/owl.carousel.min.js"></script>
-     <script src="js/smoothscroll.js"></script>
-     <script src="js/custom.js"></script>
+<!-- <script type="module">"js/jquery.js";</script>
+<script type="module">"js/bootstrap.min.js";</script>
+<script type="module">"js/owl.carousel.min.js";</script>
+<script type="module">"js/smoothscroll.js";</script>
+<script type="module">"js/custom.js";</script> -->
+<script src="{{ url_for('static', filename='js/jquery.js') }}"></script>
+     <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+     <script src="{{ url_for('static', filename='js/owl.carousel.min.js') }}"></script>
+     <script src="{{ url_for('static', filename='js/smoothscroll.js') }}"></script>
+     <script src="{{ url_for('static', filename='js/custom.js') }}"></script>
+</body>
 {% endblock %}
