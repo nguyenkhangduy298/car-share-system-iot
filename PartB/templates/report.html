@@ -4,14 +4,142 @@ Send email
 {% endblock %}
 
 {% block content %}
-<h1>EMAIL LOGIN</h1>
-<form method="POST">
-    <p>Sender email: </p>
-    <p><input type="email" name="email"></p>
-    <p>Password: </p>
-    <p><input type="password" name="password"/></p>
-    <p>Location of the car:</p>
-    <p><textarea name="location" cols="30" rows="5"></textarea></p>
-    <p><input type="submit" name="submit"/></p>
-</form>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      margin: 0;
+    }
+    
+    .navbar1 {
+      overflow: hidden;
+      background-color: #333; 
+    }
+    
+    .navbar1 a {
+      float: left;
+      font-size: 16px;
+      color: white;
+      text-align: center;
+      padding: 14px 16px;
+      text-decoration: none;
+    }
+    
+    .subnav {
+      float: left;
+      overflow: hidden;
+    }
+    
+    .subnav .subnavbtn {
+      font-size: 16px;  
+      border: none;
+      outline: none;
+      color: white;
+      padding: 14px 16px;
+      background-color: inherit;
+      font-family: inherit;
+      margin: 0;
+    }
+    
+    .navbar1 a:hover, .subnav1:hover .subnavbtn {
+      background-color: rgb(87, 83, 83);
+    }
+    
+    .subnav-content {
+      display: none;
+      position: absolute;
+      left: 0;
+      background-color: rgb(87, 83, 83);
+      width: 100%;
+      z-index: 1;
+    }
+    
+    .subnav-content a {
+      float: left;
+      color: white;
+      text-decoration: none;
+    }
+    
+    .subnav-content a:hover {
+      background-color: #eee;
+      color: black;
+    }
+    
+    .subnav:hover .subnav-content {
+      display: block;
+    }
+    .login-form {
+        width: 340px;
+        margin: 50px auto;
+          font-size: 15px;
+    }
+    .login-form form {
+        margin-bottom: 15px;
+        background: #f7f7f7;
+        box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+        padding: 30px;
+    }
+    .login-form h2 {
+        margin: 0 0 15px;
+    }
+    .form-control, .btn {
+        min-height: 38px;
+        border-radius: 2px;
+    }
+    .btn {        
+        font-size: 15px;
+        font-weight: bold;
+    }
+    </style>
+    <body>
+        <div class="navbar1">
+            <a href="/admin">Home</a>
+            <a href="manager.html">History</a>
+            <div class="subnav">
+              <button class="subnavbtn">Search and view <i class="fa fa-caret-down"></i></button>
+              <div class="subnav-content">
+                <a href="/admin/searchcustomer">Search customers</a>
+                <a href="/admin/searchcar">Search cars</a>
+                
+              </div>
+            </div> 
+            <div class="subnav">
+              <button class="subnavbtn">Edit <i class="fa fa-caret-down"></i></button>
+              <div class="subnav-content">
+                <a href="/admin/addcustomer">Add customer</a>
+                <a href="/admin/addcar">Add car</a>
+                <a href="/admin/removecar">Remove car</a>
+                <a href="/admin/removecustomer">Remove customer</a>
+                <a href="/admin/modifycar">Mofify car</a>
+                <a href="/admin/modifycustomer">Modify customer</a>
+              </div>
+            </div>
+            <a href="/admin/report">Report</a>
+             
+            <a href="/logout">Logout</a>
+            <a>wellcome {{adminHome}}</a>
+            </div>
+            <div class="login-form">
+                <form  method="POST">
+                    <h2 class="text-center">Report</h2>       
+                    <div class="form-group">
+                    <div class="form-group">
+                        <label>Sender email</label>
+                        <input type="email" name="email"class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" name="password"class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>Location of the car</label>
+                        <p><textarea name="location" cols="30" rows="5" class="form-control"></textarea></p>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary btn-block">submit</button>
+                    </div> 
+                </form>
+            </div>
+            </body>
 {% endblock %}

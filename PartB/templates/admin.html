@@ -70,13 +70,14 @@
     </head>
       <body>
         <div class="navbar1">
-        <a href="#home">Home</a>
+        <a href="/admin">Home</a>
         <a href="manager.html">History</a>
         <div class="subnav">
           <button class="subnavbtn">Search and view <i class="fa fa-caret-down"></i></button>
           <div class="subnav-content">
             <a href="/admin/searchcustomer">Search customers</a>
             <a href="/admin/searchcar">Search cars</a>
+            
           </div>
         </div> 
         <div class="subnav">
@@ -93,6 +94,7 @@
         <a href="/admin/report">Report</a>
          
         <a href="/logout">Logout</a>
+        <a>wellcome {{adminHome}}</a>
         </div>
     <img src="{{ url_for('static', filename='images/bg_1.jpg') }}" alt="Nature" class="responsive" width="1500" height="600">
     </body>

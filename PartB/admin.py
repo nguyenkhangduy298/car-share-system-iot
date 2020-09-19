@@ -13,7 +13,8 @@ def adminHome():
     Routing to admin's page
     """
     if ("user" in session) and (session["position"] == "admin"):
-        return render_template("admin.html")
+        adminHome = session["user"]
+        return render_template("admin.html",adminHome= adminHome )
     else:
         return redirect(url_for("login"))
 
