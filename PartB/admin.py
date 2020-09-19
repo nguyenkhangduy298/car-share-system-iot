@@ -135,7 +135,6 @@ def removeCustomer():
                 return redirect(url_for("adminbp.removeCustomer"))
         else:
             return render_template("remove_customer.html")
-        
     else:
         return redirect(url_for("login"))
 
