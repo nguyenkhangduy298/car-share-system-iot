@@ -82,6 +82,7 @@ def getRentalHistory():
         from main import BookHistory
         history = BookHistory.query.all()
         if len(history) > 0:
+            result = ""
             for rent in history:
                 result = result + "{}\t{}\t{}\t{}\t{}\t{} <br>".format(rent.HistoryID, 
                                                                         rent.status,
