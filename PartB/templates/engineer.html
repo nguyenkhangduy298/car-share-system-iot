@@ -1,15 +1,4 @@
 {% extends "base.html" %}
-{% block title %}Engineer page{% endblock %}
-
-{% block content %}
-    <form action="/engineer/viewmap" style="display: inline;">
-        <button>View maintenace map</button>
-    </form>
-    <form action="/logout" style="display: inline;">
-        <button>Logout</button>    
-    </form> 
-{% endblock %}
-{% extends "base.html" %}
 {% block title %}engineer{% endblock %}
 {% block head %}{{maintenance_map.js}}{% endblock %}
 

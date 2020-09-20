@@ -12,17 +12,7 @@ def engineerHome():
     """
     if ("user" in session) and (session["position"] == "engineer"):
         engineerHome = session["user"]
-        return render_template("engineer.html", engineerHome=engineerHome)
-    else:
-        return redirect(url_for("login"))
-
-
-@engineerbp.route("/viewmap", methods=["GET"])
-def viewmap():
-    """
-    Routing to engineer's maintenace map page
-    """
-    if ("user" in session) and (session["position"] == "engineer"):
+        # Create map of reported cars
         from main import googlemaps, ReportedCar
         markers = ReportedCar.query.with_entities(ReportedCar.latitude, ReportedCar.longitude).all()
         if len(markers) > 0:
@@ -40,6 +30,7 @@ def viewmap():
                 lat=10.7294,
                 lng=106.6931
             )
-        return render_template("map.html", maintenance_map=maintenance_map)
+
+        return render_template("engineer.html", engineerHome=engineerHome, maintenance_map=maintenance_map)
     else:
         return redirect(url_for("login"))
