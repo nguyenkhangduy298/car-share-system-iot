@@ -208,7 +208,7 @@ def searchCar():
                     Car.brand.like("%{}%".format(request.form["brand"])),
                     Car.company.like("%{}%".format(request.form["company"])),
                     Car.colour.like("%{}%".format(request.form["colour"])),
-                    Car.seats.like("%{}%".format(request.form["seat"])),
+                    Car.seats.like("%{}%".format(request.form["seats"])),
                     Car.category.like("%{}%".format(request.form["category"])),
                     Car.cost_per_hour.like("%{}%".format(request.form["cost"])),
                     Car.location.like("%{}%".format(request.form["location"])),

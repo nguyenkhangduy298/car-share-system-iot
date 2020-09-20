@@ -5,7 +5,8 @@ from passlib.hash import sha256_crypt
 
 from admin import adminbp
 from engineer import engineerbp
-from customer import customerbp
+# from customer import customerbp
+from manager import managerbp
 
 # Credentials for main database
 HOST = "34.126.127.197"
@@ -15,8 +16,9 @@ DATABASE = "carshare_iot_system"
 
 app = Flask(__name__)
 app.register_blueprint(adminbp, url_prefix="/admin")
-app.register_blueprint(customerbp, url_prefix="/customer")
+# app.register_blueprint(customerbp, url_prefix="/customer")
 app.register_blueprint(engineerbp, url_prefix="/engineer")
+app.register_blueprint(managerbp, url_prefix="/manager")
 
 app.config["SQLALCHEMY_DATABASE_URI"] = "mysql://{}:{}@{}/{}".format(USER, PASSWORD, HOST, DATABASE)
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
@@ -139,7 +141,7 @@ def login():
                     elif login.position == "customer":
                         return redirect(url_for("customerbp.customerHome"))
                     elif login.position == "manager":
-                        return render_template("manager.html")
+                        return redirect(url_for("managerbp.managerHome"))
                     elif login.position == "engineer":
                         return redirect(url_for("engineerbp.engineerHome"))
                 else:
@@ -160,7 +162,7 @@ def login():
             return redirect(url_for("customerbp.customerHome"))
         elif session["position"] == "manager":
             flash("You are already logged in as manager")
-            return render_template("manager.html")
+            return redirect(url_for("managerbp.managerHome"))
         elif session["position"] == "engineer":
             flash("You are already logged in as engineer")
             return redirect(url_for("engineerbp.engineerHome"))
@@ -192,17 +194,6 @@ def register():
         return redirect("login")
     else:
         return render_template("register.html")
-
-
-@app.route("/manager", methods=["GET"])
-def manager():
-    """
-    Routing to manager's page
-    """
-    if ("user" in session) and (session["position"] == "manager") :
-        return render_template("manager.html")
-    else:
-        return redirect(url_for("login"))
 
 
 if __name__ == '__main__':
