@@ -3,19 +3,161 @@
 {% block title %}Add car{% endblock %}
 
 {% block content %}
-<form action="" method="POST">
-    <h3>ID of the customer you would like to update information</h3>
-    <p>Customer ID: <input type="number" name="id"></p>
-    <br>
-    <h3>Input info for the customer</h3>
-    <p>Username: <input type="text" name="username"></p>
-    <p>Password: <input type="password" name="password"></p>
-    <p>Name: <input type="text" name="name"></p>
-    <p>Address: <input type="text" name="address"></p>
-    <p>Phone: <input type="text" name="phone"></p>
-    <p>Fax: <input type="text" name="fax"></p>
-    <p>Email: <input type="email" name="email"></p>
-    <p>Contact: <input type="text" name="contact"></p>
-    <p><input type="submit" name="submit"></p>
-</form>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+      body {
+      font-family: Arial, Helvetica, sans-serif;
+      margin: 0;
+    }
+    
+    .navbar1 {
+      overflow: hidden;
+      background-color: #333; 
+    }
+    
+    .navbar1 a {
+      float: left;
+      font-size: 16px;
+      color: white;
+      text-align: center;
+      padding: 14px 16px;
+      text-decoration: none;
+    }
+    
+    .subnav {
+      float: left;
+      overflow: hidden;
+    }
+    
+    .subnav .subnavbtn {
+      font-size: 16px;  
+      border: none;
+      outline: none;
+      color: white;
+      padding: 14px 16px;
+      background-color: inherit;
+      font-family: inherit;
+      margin: 0;
+    }
+    
+    .navbar1 a:hover, .subnav1:hover .subnavbtn {
+      background-color: rgb(87, 83, 83);
+    }
+    
+    .subnav-content {
+      display: none;
+      position: absolute;
+      left: 0;
+      background-color: rgb(87, 83, 83);
+      width: 100%;
+      z-index: 1;
+    }
+    
+    .subnav-content a {
+      float: left;
+      color: white;
+      text-decoration: none;
+    }
+    
+    .subnav-content a:hover {
+      background-color: #eee;
+      color: black;
+    }
+    
+    .subnav:hover .subnav-content {
+      display: block;
+    }
+    .login-form {
+        width: 340px;
+        margin: 50px auto;
+          font-size: 15px;
+    }
+    .login-form form {
+        margin-bottom: 15px;
+        background: #f7f7f7;
+        box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+        padding: 30px;
+    }
+    .login-form h2 {
+        margin: 0 0 15px;
+    }
+    .form-control, .btn {
+        min-height: 38px;
+        border-radius: 2px;
+    }
+    .btn {        
+        font-size: 15px;
+        font-weight: bold;
+    }
+    </style>
+    <body>
+        <div class="navbar1">
+            <a href="/admin">Home</a>
+            <a href="manager.html">History</a>
+            <div class="subnav">
+              <button class="subnavbtn">Search and view <i class="fa fa-caret-down"></i></button>
+              <div class="subnav-content">
+                <a href="/admin/searchcustomer">Search customers</a>
+                <a href="/admin/searchcar">Search cars</a>
+                
+              </div>
+            </div> 
+            <div class="subnav">
+              <button class="subnavbtn">Edit <i class="fa fa-caret-down"></i></button>
+              <div class="subnav-content">
+                <a href="/admin/addcustomer">Add customer</a>
+                <a href="/admin/addcar">Add car</a>
+                <a href="/admin/removecar">Remove car</a>
+                <a href="/admin/removecustomer">Remove customer</a>
+                <a href="/admin/modifycar">Modify car</a>
+                <a href="/admin/modifycustomer">Modify customer</a>
+              </div>
+            </div>
+            <a href="/admin/report">Report</a>
+             
+            <a href="/logout">Logout</a>
+            <a>Welcome {{adminHome}}</a>
+            </div>
+<div class="login-form">
+    <form method="POST">
+        <h2 class="text-center">Modify customer</h2>
+        <div class="form-group">
+            <label>Username</label>
+            <input type="text" name="username"class="form-control">
+        </div>
+        <div class="form-group">
+            <label>Password</label>
+            <input type="password" name="password"class="form-control">
+        </div>
+        <div class="form-group">
+            <label>Name</label>
+            <input type="text" name="name"class="form-control">
+        </div>
+        <div class="form-group">
+            <label>Address</label>
+            <input type="text" name="address"class="form-control">
+        </div>
+        <div class="form-group">
+            <label>Phone</label>
+            <input type="text" name="phone"class="form-control">
+        </div>
+        <div class="form-group">
+            <label>Fax</label>
+            <input type="text" name="fax"class="form-control">
+        </div>     
+        <div class="form-group">
+            <label>Email</label>
+            <input type="email" name="email"class="form-control">
+        </div>
+        <div class="form-group">
+            <label>Contact</label>
+            <input type="text" name="contact"class="form-control">
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary btn-block">submit</button>
+        </div> 
+    </form>
+</div>
+</body>
 {% endblock %}
