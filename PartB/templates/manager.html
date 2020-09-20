@@ -90,7 +90,18 @@
   </style>
   <body>
       <div class="navbar1">
-          <a>wellcome {{managerHome}}</a>
+          <a>Welcome {{managerHome}}</a>
           <a href="/logout">Logout</a>
-          </div>
+      </div>
+      <div>
+        <embed src="{{ bar_chart|safe }}" type="image/svg+xml" width="50%">
+      </div>
+      <br>
+      <div>
+        <embed src="{{ pie_chart|safe }}" type="image/svg+xml" width="50%">
+      </div>
+      <br>
+      <div>
+        <embed src="{{ line_chart|safe }}" type="image/svg+xml" width="50%">
+      </div>
 {% endblock %}
