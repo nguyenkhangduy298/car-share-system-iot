@@ -14,7 +14,7 @@ def adminHome():
     """
     if ("user" in session) and (session["position"] == "admin"):
         adminHome = session["user"]
-        return render_template("admin.html",adminHome= adminHome )
+        return render_template("admin.html", adminHome=adminHome)
     else:
         return redirect(url_for("login"))
 

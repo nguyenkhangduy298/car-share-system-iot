@@ -85,11 +85,13 @@ def managerHome():
     """
     Routing to manager's page
     """
-    if ("user" in session) and (session["position"] == "manager") :
+    if ("user" in session) and (session["position"] == "manager"):
+        managerHome = session["user"]
+
         bar_chart = Graph.plot_booking_by_cars()
         pie_chart = Graph.plot_monthly_booking()
         line_chart = Graph.plot_daily_booking()
-        return render_template("manager.html", bar_chart=bar_chart, pie_chart=pie_chart, line_chart=line_chart)
+        return render_template("manager.html", managerHome=managerHome, bar_chart=bar_chart, pie_chart=pie_chart, line_chart=line_chart)
     else:
         return redirect(url_for("login"))
         
