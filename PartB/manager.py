@@ -8,6 +8,7 @@ def managerHome():
     Routing to manager's page
     """
     if ("user" in session) and (session["position"] == "manager") :
-        return render_template("manager.html")
+        managerHome = session["user"]
+        return render_template("manager.html",managerHome=managerHome)
     else:
         return redirect(url_for("login"))

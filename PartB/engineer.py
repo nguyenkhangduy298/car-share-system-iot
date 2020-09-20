@@ -11,7 +11,8 @@ def engineerHome():
     Routing to engineer's page
     """
     if ("user" in session) and (session["position"] == "engineer"):
-        return render_template("engineer.html")
+        engineerHome = session["user"]
+        return render_template("engineer.html", engineerHome=engineerHome)
     else:
         return redirect(url_for("login"))
 
