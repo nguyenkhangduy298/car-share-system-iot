@@ -121,6 +121,24 @@ class Car(db.Model):
         self.CustomerID = CustomerID
 
 
+class BookHistory(db.Model):
+    __tablename__ = "BookHistory"
+    HistoryID = db.Column(db.Integer, nullable=False, primary_key=True)
+    status = db.Column(db.Text)
+    carID = db.Column(db.Integer, nullable=False)
+    customerID = db.Column(db.Integer, nullable=False)
+    bookTime = db.Column(db.Date, nullable=False)
+    endTime = db.Column(db.Date, nullable=False)
+
+    def __init__(self, HistoryID, status, carID, customerID, bookTime, endTime):
+        self.HistoryID = HistoryID
+        self.status = status
+        self.carID = carID
+        self.customerID = customerID
+        self.bookTime = bookTime
+        self.endTime = endTime
+
+
 @app.route("/", methods=["POST", "GET"])
 @app.route("/login", methods=["POST", "GET"])
 def login():

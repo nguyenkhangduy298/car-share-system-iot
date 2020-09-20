@@ -1,5 +1,4 @@
 from flask import Blueprint, session, render_template, redirect
-import os
 import MySQLdb
 import datetime
 from calendar import monthrange

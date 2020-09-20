@@ -73,6 +73,30 @@ def sendEmail():
         return redirect(url_for("login"))
 
 
+@adminbp.route("/history", methods=["GET"])
+def getRentalHistory():
+    """
+    Get car rental history
+    """
+    if ("user" in session) and (session["position"] == "admin"):
+        from main import BookHistory
+        history = BookHistory.query.all()
+        if len(history) > 0:
+            for rent in history:
+                result = result + "{}\t{}\t{}\t{}\t{}\t{} <br>".format(rent.HistoryID, 
+                                                                        rent.status,
+                                                                        rent.carID,
+                                                                        rent.customerID, 
+                                                                        rent.bookTime,
+                                                                        rent.endTime)
+            return result
+        else:
+            flash("There is no car rental history")
+            return redirect(url_for("adminbp.getRentalHistory"))
+    else:
+        return redirect(url_for("login"))
+
+
 # Customer CRUD
 @adminbp.route("/searchcustomer", methods=["GET", "POST"])
 def searchCustomer():
