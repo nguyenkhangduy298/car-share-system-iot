@@ -160,7 +160,6 @@ def removeCustomer():
                 return redirect(url_for("adminbp.removeCustomer"))
         else:
             return render_template("remove_customer.html")
-        
     else:
         return redirect(url_for("login"))
 
@@ -198,14 +197,14 @@ def modifyCustomer():
                 customer_id = request.form["id"]
                 customer = searchCustomerById(customer_id)
                 # Update information
-                customer.username = request.form["username"]
-                customer.password = request.form["password"]
-                customer.Name = request.form["name"]
-                customer.address = request.form["address"]
-                customer.phone = request.form["phone"]
-                customer.fax = request.form["fax"]
-                customer.email = request.form["email"]
-                customer.contact = request.form["contact"]
+                if request.form["username"] != "": customer.username = request.form["username"] 
+                if request.form["password"] != "": customer.password = request.form["password"] 
+                if request.form["name"] != "": customer.Name = request.form["name"] 
+                if request.form["address"] != "": customer.address = request.form["address"] 
+                if request.form["phone"] != "": customer.phone = request.form["phone"] 
+                if request.form["fax"] != "": customer.fax = request.form["fax"] 
+                if request.form["email"] != "": customer.email = request.form["email"] 
+                if request.form["contact"] != "": customer.contact = request.form["contact"]  
 
                 db.session.commit()
                 flash("Information updated successfully")
@@ -331,18 +330,18 @@ def modifyCar():
                 car_id = request.form["id"]
                 car = searchCarById(car_id)
                 # Update information
-                car.status = request.form["status"]
-                car.Name = request.form["name"]
-                car.model = request.form["model"]
-                car.brand = request.form["brand"]
-                car.company = request.form["name"]
-                car.colour = request.form["colour"]
-                car.seats = request.form["seats"]
-                car.description = request.form["description"]
-                car.category = request.form["category"]
-                car.cost_per_hour = request.form["cost"]
-                car.location = request.form["location"]
-                car.CustomerID = request.form["customer"]
+                if request.form["status"]: car.status = request.form["status"]
+                if request.form["name"]: car.Name = request.form["name"]
+                if request.form["model"]: car.model = request.form["model"]
+                if request.form["brand"]: car.brand = request.form["brand"]
+                if request.form["company"]: car.company = request.form["company"]
+                if request.form["colour"]: car.colour = request.form["colour"]
+                if request.form["seats"]: car.seats = request.form["seats"]
+                if request.form["description"]: car.description = request.form["description"]
+                if request.form["category"]: car.category = request.form["category"]
+                if request.form["cost"]: car.cost_per_hour = request.form["cost"]
+                if request.form["location"]: car.location = request.form["location"]
+                if request.form["customer"]: car.CustomerID = request.form["customer"]
 
                 db.session.commit()
                 flash("Information updated successfully")
