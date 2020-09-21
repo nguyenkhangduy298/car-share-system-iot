@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %} Cancel booking {% endblock %}
+{% block content %} 
+<style>
+.form-control, .btn {
+    min-height: 38px;
+    border-radius: 2px;
+}
+</style>
+
+    {{carlist|safe}}
+    <br> <br>
+    <form method="POST">
+        <div>
+            <label>ID of the car you want to cancel booking</label>
+            <input type="number" name="id">
+        </div>
+    </form>
+{% endblock %}
