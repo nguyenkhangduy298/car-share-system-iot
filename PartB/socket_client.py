@@ -1,6 +1,11 @@
 #!/usr/bin/env python3
 # Documentation: https://docs.python.org/3/library/socket.html
 import socket, json, pprint, socket_utils
+import cv2
+cap = cv2.VideoCapture(-1)
+detector = cv2.QRCodeDetector()
+_, img = cap.read()
+data, bbox, _ = detector.detectAndDecode(img)
 
 HOST = input("Enter IP address of server: ")
 
@@ -14,7 +19,7 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
     print("Connected.")
 
     while True:
-        message = input("Enter message (blank input to end): ")
+        message = input(data)
         if(not message):
             socket_utils.sendJson(s, { "end": True })
             break

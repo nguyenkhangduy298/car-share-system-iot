@@ -2,7 +2,7 @@ import cv2
 from database_utils import DatabaseUtils
 from flask_sqlalchemy import SQLAlchemy
 
-cap = cv2.VideoCapture(1)
+cap = cv2.VideoCapture(-1)
 
 detector = cv2.QRCodeDetector()
 
