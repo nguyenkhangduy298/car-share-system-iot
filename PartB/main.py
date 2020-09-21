@@ -91,29 +91,6 @@ class ReportedCar(db.Model):
         self.longitude = longitude
 
 
-class Customer(db.Model):
-    __tablename__ = "Customer"
-    CustomerID = db.Column(db.Integer, nullable=False, primary_key=True)
-    username = db.Column(db.Text, nullable=False)
-    password = db.Column(db.Text, nullable=False)
-    Name = db.Column(db.Text, nullable=False)
-    address = db.Column(db.Text)
-    phone = db.Column(db.Text)
-    fax = db.Column(db.Text)
-    email = db.Column(db.Text)
-    contact = db.Column(db.Text)
-
-    def __init__(self, username, password, Name, address, phone, fax, email, contact):
-        self.username = username
-        self.password = password
-        self.Name = Name
-        self.address = address
-        self.phone = phone
-        self.fax = fax
-        self.email = email
-        self.contact = contact
-
-
 class Car(db.Model):
     __tablename__ = "Car"
     CarID = db.Column(db.Integer, nullable=False, primary_key=True)

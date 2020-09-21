@@ -19,7 +19,10 @@ from httplib2 import Http
 from oauth2client import file, client, tools
 
 customerbp = Blueprint("customerbp", __name__, template_folder="templates")
-#PEOPLE_FOLDER = os.path.join('static', 'people_photo')
+
+# PEOPLE_FOLDER = os.path.join('static', 'people_photo')
+
+
 @customerbp.route("/", methods=["GET"])
 def customerHome():
     """
@@ -42,6 +45,7 @@ def customerHome():
 #     else:
 #         return redirect(url_for("login"))
 
+
 @customerbp.route("/contact", methods=["GET"])
 def customerContact():
     """
@@ -52,11 +56,11 @@ def customerContact():
     else:
         return redirect(url_for("login"))
 
-...
-@customerbp.route('/login', methods=['POST'])
-def login_post():
-    ...
-    return redirect(url_for('main.profile'))
+# ...
+# @customerbp.route('/login', methods=['POST'])
+# def login_post():
+#     ...
+#     return redirect(url_for('main.profile'))
 
 @customerbp.route("/history", methods=["GET"])
 def viewCarList():
@@ -65,24 +69,29 @@ def viewCarList():
     """
     from main import Car
     from main import Login
-    car_list = main.Car.query.filter(Car.CustomerID==Login.ID).all()
-    if len(car_list) > 0:
-        result = ""
-        for car in car_list:
-            result = result + "{}\t{}\t{}\t{}\t{}\t{}\t{}\t <br>".format(car.Name,
-                                                                        car.model,
-                                                                        car.brand,
-                                                                        car.colour,
-                                                                        car.seats,
-                                                                        car.company,
-                                                                        car.description,
-                                                                        car.category,
-                                                                        car.cost_per_hour,
-                                                                        car.location)
-        return result
+    if ("user" in session) and (session["position"]=="customer"):
+        car_list = Car.query.filter(Car.CustomerID==Login.ID).all()
+        print(car_list)
+        if len(car_list) > 0:
+            result = ""
+            for car in car_list:
+                result = result + "{}\t{}\t{}\t{}\t{}\t{}\t{}\t <br>".format(car.Name,
+                                                                            car.model,
+                                                                            car.brand,
+                                                                            car.colour,
+                                                                            car.seats,
+                                                                            car.company,
+                                                                            car.description,
+                                                                            car.category,
+                                                                            car.cost_per_hour,
+                                                                            car.location)
+            return result
+        else:
+            flash("Cannot find matching result")
+            return redirect(url_for("customerbp.searchCustomer"))
     else:
-        flash("Cannot find matching result")
-        return redirect(url_for("customerbp.searchCustomer"))
+        return redirect(url_for("login"))
+
 
 @customerbp.route("/bookCalendar", methods=["GET"])
 def bookCalendar():
