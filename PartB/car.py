@@ -1,4 +1,5 @@
 import bluetooth
+import cv2
 
 cap = cv2.VideoCapture(-1)
 detector = cv2.QRCodeDetector()
@@ -48,8 +49,8 @@ def runMenu(self):
                                 print ("the car is open")
                             else:
                                 print ("Alert")
-    except UnicodeEncodeError:
-        print("   {} - {}".format(addr, name.encode("utf-8", "replace")))
+                        except UnicodeEncodeError:
+                            print("   {} - {}".format(addr, name.encode("utf-8", "replace")))
             else:
                 print()
                 print("1. use the username and password")
@@ -57,7 +58,11 @@ def runMenu(self):
                 selection2 = input("Select an option: ")
                 print()
                 if (selection2 == 1):
-                    username = input("username: ")
-                    password = input("password:")
+                    name = input("username: ")
+                    password1 = input("password:")
+                    if(name == username) and (password1 == password):
+                        print(" the car is unlock, you can use this car")
+                    else:
+                        print(" sorry!! wrong username or password")
                 else:
-
+                    print("scan your face")
