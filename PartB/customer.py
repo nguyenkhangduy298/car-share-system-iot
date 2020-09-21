@@ -62,7 +62,7 @@ def customerContact():
 #     ...
 #     return redirect(url_for('main.profile'))
 
-@customerbp.route("/rentList", methods=["GET"])
+@customerbp.route("/bookedList", methods=["GET"])
 def viewCarList():
     """
         View User's Car List History
