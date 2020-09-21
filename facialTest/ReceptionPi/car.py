@@ -1,8 +1,16 @@
 import bluetooth
 import cv2
+import socket, json, sys
+sys.path.append("..")
+import socket_utils
 
 cap = cv2.VideoCapture(-1)
 detector = cv2.QRCodeDetector()
+
+HOST = ""    # Empty string means to listen on all IP's on the machine, also works with IPv6.
+             # Note "0.0.0.0" also works but only with IPv4.
+PORT = 63000 # Port to listen on (non-privileged ports are > 1023).
+ADDRESS = (HOST, PORT)
 
 def runMenu():
     while(True):
@@ -61,12 +69,40 @@ def runMenu():
             print()
             if (selection2 == "1"):
                 name = input("username: ")
-                password1 = input("password:")
-                if(name == "nhan"):
-                    print(" the car is unlock, you can use this car")
-                else:
-                    print(" sorry!! wrong username or password")
+                password = input("password:")
+                user = getUser(name,password)
+                login(user)
+
             else:
                 print("scan your face")
+
+def getUser(username,password):
+    connection = sqlite3.connect(DB_NAME)
+    connection.row_factory = sqlite3.Row
+    with connection:
+        cursor = connection.cursor()
+        cursor.execute("select * from Users where UserName = ? and Password = ?", (username,password,))
+        row = cursor.fetchone()
+    connection.close()
+
+    return { "username": row["UserName"], "firstname": row["FirstName"], "lastname": row["LastName"]  }
+
+def login(user):
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+        print("Connecting to {}...".format(ADDRESS))
+        s.connect(ADDRESS)
+        print("Connected.")
+
+        print("Logging in as {}".format(user["username"]))
+        socket_utils.sendJson(s, user)
+
+        print("Waiting for Master Pi...")
+        while(True):
+            object = socket_utils.recvJson(s)
+            if("logout" in object):
+                print("Master Pi logged out.")
+                print()
+                break
+
 if __name__ == "__main__":
     runMenu()
