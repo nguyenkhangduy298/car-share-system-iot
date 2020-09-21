@@ -3,7 +3,6 @@ import unittest
 import MySQLdb
 from database_utils import DatabaseUtils
 
-
 class TestDatabaseUtils(unittest.TestCase):
     HOST = "35.201.18.142"
     USER = "root"
@@ -72,3 +71,4 @@ class TestDatabaseUtils(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+    searchCustomer.admin()

@@ -3,8 +3,8 @@ Course: COSC2790 Programming Internet of Things
 Semester: 2020B
 Assessment 2: Car Share IoT application
 Group: 10
-Members: Nguyen Trung Duc, Le Nguyen Thien Phu, Vu Duy Khoi, Pham Nguyen Thanh Nhan, Nguyen Khang Duy    
-Student ID: s3695504 , s3639855, s3694615, s3563953, S3636076
+Members: Pham Nguyen Thanh Nhan, Nguyen Khang Duy , Vu Duy Khoi , Nguyen Trung Duc, Le Nguyen Thien Phu, 
+Student ID: s3563953, S3636076, s3694615, s3695504 , s3639855
 
 1. INTRODUCTION
 The aim of this assignment is to develop a automatic car share system. To be specific, this system can be used to search, book, unlock and lock cars. 
@@ -16,17 +16,17 @@ socket programming.
 
 2. ACCOUNTS FOR ALL TYPES OF USER
 - Customer:
-    Username:
-    Password:
+    Username:customer
+    Password:customer
 - System admin:
-    Username:
-    Password:
+    Username:admin
+    Password:admin
 - Company manager:
-    Username:
-    Password:
+    Username:manager
+    Password:manager
 - Engineer:
-    Username:
-    Password:
+    Username:engineer
+    Password:engineer
 
 3. FEATURES
 All in formation would be stored in the google cloud mySQL database including all user account, cars' information, booking history as well as system data
