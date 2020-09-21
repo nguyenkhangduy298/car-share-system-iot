@@ -64,7 +64,8 @@ def viewCarList():
         View User's Car List History
     """
     from main import Car
-    car_list = Car.query.filter(Car.CustomerID==8).all()
+    from main import Login
+    car_list = main.Car.query.filter(Car.CustomerID==Login.ID).all()
     if len(car_list) > 0:
         result = ""
         for car in car_list:
@@ -88,6 +89,7 @@ def bookCalendar():
     """
         Booking Cars and Update in Google Calendar
     """
+
     # If modifying these scopes, delete the file token.json.
     SCOPES = "https://www.googleapis.com/auth/calendar"
     store = file.Storage("token.json")
@@ -115,8 +117,8 @@ def bookCalendar():
     time_start = "{}T06:00:00+10:00".format(tomorrow)
     time_end = "{}T07:00:00+10:00".format(tomorrow)
     event = {
-        "summary": "New Programmatic Event",
-        "location": "RMIT Building 14",
+        "summary": "Car Booking Duration",
+        "location": "RMIT",
         "description": "Adding new IoT event",
         "start": {
             "dateTime": time_start,
@@ -127,8 +129,7 @@ def bookCalendar():
             "timeZone": "Australia/Melbourne",
         },
         "attendees": [
-            {"email": "kevin@scare.you"},
-            {"email": "shekhar@wake.you"},
+            {"email": "kduy298@gmail.com"},
         ],
         "reminders": {
             "useDefault": False,
@@ -142,4 +143,13 @@ def bookCalendar():
     event = service.events().insert(calendarId="primary", body=event).execute()
     print("Event created: {}".format(event.get("htmlLink")))
 
-# [END calendar_quickstart]
+    flash("Calendar Updated")
+    flash("Car Booked")
+    return redirect(url_for("customerbp.customerHome"))
+
+def searchCarById(car_id):
+    from main import Car
+    car = Car.query.filter_by(
+        CarID=car_id
+    ).first()
+    return car
