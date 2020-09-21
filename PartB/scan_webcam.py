@@ -7,7 +7,7 @@ cap = cv2.VideoCapture(1)
 detector = cv2.QRCodeDetector()
 
 def main(self):
-    with Customer() as db:
+    with DatabaseUtils() as db:
         db.createCustomerTable()
         db.createCarTable()
         db.createBookHistoryTable()
