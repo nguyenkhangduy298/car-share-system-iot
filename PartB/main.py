@@ -5,7 +5,7 @@ from passlib.hash import sha256_crypt
 
 from admin import adminbp
 from engineer import engineerbp
-# from customer import customerbp
+from customer import customerbp
 from manager import managerbp
 
 # Credentials for main database
@@ -16,7 +16,7 @@ DATABASE = "carshare_iot_system"
 
 app = Flask(__name__)
 app.register_blueprint(adminbp, url_prefix="/admin")
-# app.register_blueprint(customerbp, url_prefix="/customer")
+app.register_blueprint(customerbp, url_prefix="/customer")
 app.register_blueprint(engineerbp, url_prefix="/engineer")
 app.register_blueprint(managerbp, url_prefix="/manager")
 

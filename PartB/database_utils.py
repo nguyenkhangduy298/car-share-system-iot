@@ -1,6 +1,6 @@
 import MySQLdb
-import pymysqlfrom 
-from flask_login import UserMixin
+# import pymysql
+# from flask_login import UserMixin
 
 class DatabaseUtils:
 
