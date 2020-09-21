@@ -62,18 +62,18 @@ def customerContact():
 #     ...
 #     return redirect(url_for('main.profile'))
 
-@customerbp.route("/history", methods=["GET"])
+@customerbp.route("/rentList", methods=["GET"])
 def viewCarList():
     """
         View User's Car List History
     """
     from main import Car
-    from main import Login
+    from main import Person 
     if ("user" in session) and (session["position"]=="customer"):
-        car_list = Car.query.filter(Car.CustomerID==Login.ID).all()
-        print(car_list)
+        person = Person.query.filter(Person.username==session["user"]).first()
+        car_list = Car.query.filter(Car.CustomerID==person.ID).all()
         if len(car_list) > 0:
-            result = ""
+            result = "Here is the list of cars you are renting: <br> <br>"
             for car in car_list:
                 result = result + "{}\t{}\t{}\t{}\t{}\t{}\t{}\t <br>".format(car.Name,
                                                                             car.model,
@@ -87,12 +87,12 @@ def viewCarList():
                                                                             car.location)
             return result
         else:
-            flash("Cannot find matching result")
-            return redirect(url_for("customerbp.searchCustomer"))
+            flash("There is no car that you are renting")
+            return redirect(url_for("customerbp.customerHome"))
     else:
         return redirect(url_for("login"))
 
-@customerbp.route("/searchcar", methods=["GET", "POST"])
+@customerbp.route("/search", methods=["GET", "POST"])
 def searchCar():
     """
         Search Car By Properties
@@ -102,7 +102,7 @@ def searchCar():
         if request.method == "POST":
             car_list = Car.query.filter(
                 Car.CarID.like("%{}%".format(request.form["id"])),
-                Car.status.like("%{}%".format(request.form["status"])),
+                Car.status.like("Available"),
                 Car.Name.like("%{}%".format(request.form["name"])),
                 Car.model.like("%{}%".format(request.form["model"])),
                 Car.brand.like("%{}%".format(request.form["brand"])),
@@ -115,7 +115,7 @@ def searchCar():
                 Car.CustomerID.like("%{}%".format(request.form["customer"]))
             ).all()
             if len(car_list) > 0:
-                result = ""
+                result = "Available cars corresponding to your requirement <br> <br>"
                 for car in car_list:
                     result = result + "{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t <br>".format(car.CarID,
                                                                                                     car.status,
@@ -132,12 +132,89 @@ def searchCar():
                                                                                                     car.CustomerID)
                 return result
             else:
-                flash("Cannot find any matching results")
+                flash("There is no available car correnponding your requirement")
                 return redirect(url_for("customerbp.searchCar"))
         else:
-            return render_template("search_car.html")
+            return render_template("search_car_customer.html")
     else:
         return redirect(url_for("login"))
+
+
+@customerbp.route("/available", methods=["GET"])
+def availableCars():
+    """
+        Search Car By Properties
+    """
+    if ("user" in session) and (session["position"] == "customer"):
+        from main import Car
+        car_list = Car.query.filter(
+            Car.status.like("Available")
+        ).all()
+        if len(car_list) > 0:
+            result = "List of available cars: <br> <br>"
+            for car in car_list:
+                result = result + "{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t <br>".format(car.CarID,
+                                                                                                car.status,
+                                                                                                car.Name,
+                                                                                                car.model,
+                                                                                                car.brand,
+                                                                                                car.company,
+                                                                                                car.colour,
+                                                                                                car.seats,
+                                                                                                car.description,
+                                                                                                car.category,
+                                                                                                car.cost_per_hour,
+                                                                                                car.location,
+                                                                                                car.CustomerID)
+            return result
+        else:
+            flash("There is no available car correnponding your requirement")
+            return redirect(url_for("customerbp.customerHome"))
+    else:
+        return redirect(url_for("login"))
+
+
+@customerbp.route("/cancel", methods=["GET", "POST"])
+def cancelBooking():
+    """
+        Cancel a car booking of the user
+    """
+    if ("user" in session) and (session["position"]=="customer"):
+        from main import Car, Person, db
+        if request.method == "POST":
+            try:
+                car = Car.query.filter(Car.CarID==request.form["id"]).first()
+                car.status = "Available"
+                car.CustomerID = None
+                db.session.commit()
+                flash("Cancel successfully")
+                return redirect(url_for("customerbp.cancelBooking"))
+            except AttributeError:
+                flash("You have no car of that ID booked")
+                return redirect(url_for("customerbp.cancelBooking"))
+        else:
+            person = Person.query.filter(Person.username==session["user"]).first()
+            car_list = Car.query.filter(Car.CustomerID==person.ID).all()
+            if len(car_list) > 0:
+                result = "Here is the list of cars you are renting: <br><br>"
+                for car in car_list:
+                    result = result + "{}\t{}\t{}\t{}\t{}\t{}\t{}\t <br>".format(   car.CarID,
+                                                                                    car.Name,
+                                                                                    car.model,
+                                                                                    car.brand,
+                                                                                    car.colour,
+                                                                                    car.seats,
+                                                                                    car.company,
+                                                                                    car.description,
+                                                                                    car.category,
+                                                                                    car.cost_per_hour,
+                                                                                    car.location)
+            else:
+                flash("You currently do not have any car booked")
+                return redirect(url_for("customerbp.customerHome"))
+            return render_template("cancel.html", carlist=result)
+    else:
+        return redirect(url_for("customerHome"))
 
 
 @customerbp.route("/bookCalendar", methods=["GET"])
