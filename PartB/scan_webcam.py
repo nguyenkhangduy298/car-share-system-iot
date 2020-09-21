@@ -1,5 +1,5 @@
 import cv2
-from main import Customer
+from database_utils import DatabaseUtils
 from flask_sqlalchemy import SQLAlchemy
 
 cap = cv2.VideoCapture(1)
@@ -13,7 +13,7 @@ def main(self):
         db.createBookHistoryTable()
         db.createExecutiveTable()
         print(db.getCustomer())
-
+    self.runQR()
 def runQR(self):
     while True:
         _, img = cap.read()
@@ -34,13 +34,11 @@ def runQR(self):
 
 def viewHistory(self,CustomerID):
         print("-----View profile------------")
-        print( "{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t <br>".format(customer.CustomerID,
-                                                            customer.username,
-                                                            customer.Name,
-                                                            customer.address,
-                                                            customer.phone,
-                                                            customer.fax,
-                                                            customer.email,
-                                                            customer.contact))
+        with DatabaseUtils() as db:
+            for car in db.viewHistory(customerId):
+                print( "{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t".format(customer[0], customer[1], 
+                                                                    customer[2], customer[3], customer[4], 
+                                                                    customer[5], customer[6], customer[7], 
+                                                                    customer[8]))
 cap.release()
 cv2.destroyAllWindows()
