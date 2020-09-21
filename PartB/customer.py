@@ -92,6 +92,53 @@ def viewCarList():
     else:
         return redirect(url_for("login"))
 
+@customerbp.route("/searchcar", methods=["GET", "POST"])
+def searchCar():
+    """
+        Search Car By Properties
+    """
+    if ("user" in session) and (session["position"] == "customer"):
+        from main import Car
+        if request.method == "POST":
+            car_list = Car.query.filter(
+                Car.CarID.like("%{}%".format(request.form["id"])),
+                Car.status.like("%{}%".format(request.form["status"])),
+                Car.Name.like("%{}%".format(request.form["name"])),
+                Car.model.like("%{}%".format(request.form["model"])),
+                Car.brand.like("%{}%".format(request.form["brand"])),
+                Car.company.like("%{}%".format(request.form["company"])),
+                Car.colour.like("%{}%".format(request.form["colour"])),
+                Car.seats.like("%{}%".format(request.form["seats"])),
+                Car.category.like("%{}%".format(request.form["category"])),
+                Car.cost_per_hour.like("%{}%".format(request.form["cost"])),
+                Car.location.like("%{}%".format(request.form["location"])),
+                Car.CustomerID.like("%{}%".format(request.form["customer"]))
+            ).all()
+            if len(car_list) > 0:
+                result = ""
+                for car in car_list:
+                    result = result + "{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t <br>".format(car.CarID,
+                                                                                                    car.status,
+                                                                                                    car.Name,
+                                                                                                    car.model,
+                                                                                                    car.brand,
+                                                                                                    car.company,
+                                                                                                    car.colour,
+                                                                                                    car.seats,
+                                                                                                    car.description,
+                                                                                                    car.category,
+                                                                                                    car.cost_per_hour,
+                                                                                                    car.location,
+                                                                                                    car.CustomerID)
+                return result
+            else:
+                flash("Cannot find any matching results")
+                return redirect(url_for("customerbp.searchCar"))
+        else:
+            return render_template("search_car.html")
+    else:
+        return redirect(url_for("login"))
+
 
 @customerbp.route("/bookCalendar", methods=["GET"])
 def bookCalendar():
@@ -121,21 +168,23 @@ def bookCalendar():
         start = event["start"].get("dateTime", event["start"].get("date"))
         print(start, event["summary"])
 
-    date = datetime.now()
-    tomorrow = (date + timedelta(days=1)).strftime("%Y-%m-%d")
-    time_start = "{}T06:00:00+10:00".format(tomorrow)
-    time_end = "{}T07:00:00+10:00".format(tomorrow)
+    date = datetime(2020,9,30)
+    start = date.strftime("%Y-%m-%d")
+    time_start = "{}T06:00:00+10:00".format(start)
+    date2 = datetime(2020,10,1)
+    end = date2.strftime("%Y-%m-%d")
+    time_end = "{}T07:00:00+10:00".format(end)
     event = {
         "summary": "Car Booking Duration",
         "location": "RMIT",
         "description": "Adding new IoT event",
         "start": {
             "dateTime": time_start,
-            "timeZone": "Australia/Melbourne",
+            "timeZone": "Asia/Tokyo",
         },
         "end": {
             "dateTime": time_end,
-            "timeZone": "Australia/Melbourne",
+            "timeZone": "Asia/Tokyo",
         },
         "attendees": [
             {"email": "kduy298@gmail.com"},
