@@ -102,24 +102,25 @@ def getRentalHistory():
 @adminbp.route("/searchcustomer", methods=["GET", "POST"])
 def searchCustomer():
     if ("user" in session) and (session["position"] == "admin"):
-        from main import Customer
+        from main import Person
         if request.method == "POST":
-                customer_list = Customer.query.filter(
-                    Customer.CustomerID.like("%{}%".format(request.form["id"])),
-                    Customer.username.like("%{}%".format(request.form["username"])),
-                    Customer.Name.like("%{}%".format(request.form["name"])),
-                    Customer.address.like("%{}%".format(request.form["address"])),
-                    Customer.phone.like("%{}%".format(request.form["phone"])),
-                    Customer.fax.like("%{}%".format(request.form["fax"])),
-                    Customer.email.like("%{}%".format(request.form["email"])),
-                    Customer.contact.like("%{}%".format(request.form["contact"]))
+                customer_list = Person.query.filter(
+                    Person.position==4,
+                    Person.ID.like("%{}%".format(request.form["id"])),
+                    Person.username.like("%{}%".format(request.form["username"])),
+                    Person.name.like("%{}%".format(request.form["name"])),
+                    Person.address.like("%{}%".format(request.form["address"])),
+                    Person.phone.like("%{}%".format(request.form["phone"])),
+                    Person.fax.like("%{}%".format(request.form["fax"])),
+                    Person.email.like("%{}%".format(request.form["email"])),
+                    Person.contact.like("%{}%".format(request.form["contact"]))
                 ).all()
                 if len(customer_list) > 0:
                     result = ""
                     for customer in customer_list:
-                        result = result + "{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t <br>".format(customer.CustomerID,
+                        result = result + "{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t <br>".format(customer.ID,
                                                                                     customer.username,
-                                                                                    customer.Name,
+                                                                                    customer.name,
                                                                                     customer.address,
                                                                                     customer.phone,
                                                                                     customer.fax,
@@ -136,9 +137,10 @@ def searchCustomer():
 
 
 def searchCustomerById(customer_id):
-    from main import Customer
-    customer = Customer.query.filter_by(
-        CustomerID=customer_id
+    from main import Person
+    customer = Person.query.filter_by(
+        position=4,
+        ID=customer_id
     ).first()
     return customer
 
@@ -147,7 +149,7 @@ def searchCustomerById(customer_id):
 def removeCustomer():
     if ("user" in session) and (session["position"] == "admin"):
         if request.method == "POST":
-            from main import Customer, db
+            from main import Person, db
             customer_id = request.form["id"]
             customer = searchCustomerById(customer_id)
             if customer is not None:
@@ -168,7 +170,7 @@ def removeCustomer():
 def addCustomer():
     if ("user" in session) and (session["position"] == "admin"):
         if request.method == "POST":
-            from main import Customer, db
+            from main import Person, db
             username = request.form["username"]
             password = request.form["password"]
             name = request.form["name"]
@@ -177,7 +179,7 @@ def addCustomer():
             fax = request.form["fax"]
             email = request.form["email"]
             contact = request.form["contact"]
-            customer = Customer(username, password, name, address, phone, fax, email, contact)
+            customer = Person(username, password, 4, name, address, phone, fax, email, contact, "")
             db.session.add(customer)
             db.session.commit()
             flash("New customer added successfully")
