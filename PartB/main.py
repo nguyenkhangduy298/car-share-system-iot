@@ -203,13 +203,19 @@ def register():
     Routing to page for registering executive account
     """
     if request.method == "POST":
-        username = request.form["name"]
+        username = request.form["username"]
         password = request.form["password"]
         hashed_password = sha256_crypt.hash(password)
         position = request.form["position"]
         role = Role.query.filter_by(position=position).first()
         positionID = role.ID
-        person = Person(username, hashed_password, positionID, "", "", "", "", "", "", "",)
+        name = request.form["name"]
+        address = request.form["address"]
+        phone = request.form["phone"]
+        fax = request.form["fax"]
+        email = request.form["email"]
+        contact = request.form["contact"]
+        person = Person(username, hashed_password, positionID, name, address, phone, fax, email, contact, "")
         db.session.add(person)
         db.session.commit()
         flash("Registered successfully")
