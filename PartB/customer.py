@@ -139,40 +139,86 @@ def searchCar():
     else:
         return redirect(url_for("login"))
 
+#
+# def availableCars():
+#     """
+#         Search Car By Properties
+#     """
+#     if ("user" in session) and (session["position"] == "customer"):
+#         from main import Car
+#         car_list = Car.query.filter(
+#             Car.status.like("Available")
+#         ).all()
+#         if len(car_list) > 0:
+#             result = "List of available cars: <br> <br>"
+#             for car in car_list:
+#                 result = result + "{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t <br>".format(car.CarID,
+#                                                                                                 car.status,
+#                                                                                                 car.Name,
+#                                                                                                 car.model,
+#                                                                                                 car.brand,
+#                                                                                                 car.company,
+#                                                                                                 car.colour,
+#                                                                                                 car.seats,
+#                                                                                                 car.description,
+#                                                                                                 car.category,
+#                                                                                                 car.cost_per_hour,
+#                                                                                                 car.location,
+#                                                                                                 car.CustomerID)
+#             # return result
+#             render_template("book.html", carlist=result)
+#         else:
+#             flash("There is no available car correnponding your requirement")
+#             return redirect(url_for("customerbp.customerHome"))
+#
+#     else:
+#         return redirect(url_for("login"))
 
-@customerbp.route("/available", methods=["GET"])
-def availableCars():
+@customerbp.route("/available", methods=["GET", "POST"])
+def availableBooking():
     """
-        Search Car By Properties
+        Book an available car for the user
     """
-    if ("user" in session) and (session["position"] == "customer"):
-        from main import Car
-        car_list = Car.query.filter(
-            Car.status.like("Available")
-        ).all()
-        if len(car_list) > 0:
-            result = "List of available cars: <br> <br>"
-            for car in car_list:
-                result = result + "{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t <br>".format(car.CarID,
-                                                                                                car.status,
-                                                                                                car.Name,
-                                                                                                car.model,
-                                                                                                car.brand,
-                                                                                                car.company,
-                                                                                                car.colour,
-                                                                                                car.seats,
-                                                                                                car.description,
-                                                                                                car.category,
-                                                                                                car.cost_per_hour,
-                                                                                                car.location,
-                                                                                                car.CustomerID)
-            return result
+    if ("user" in session) and (session["position"]=="customer"):
+        from main import Car, Person, db
+        if request.method == "POST":
+            try:
+                car = Car.query.filter(Car.CarID==request.form["id"]).first()
+                car.status = "Available"
+                car.CustomerID = None
+                db.session.commit()
+                flash("Cancel successfully")
+                return redirect(url_for("customerbp.availableBooking"))
+            except AttributeError:
+                flash("You have no car of that ID booked")
+                return redirect(url_for("customerbp.availableBooking"))
         else:
-            flash("There is no available car correnponding your requirement")
-            return redirect(url_for("customerbp.customerHome"))
+            from main import Car
+            car_list = Car.query.filter(
+                Car.status.like("Available")
+            ).all()
+            if len(car_list) > 0:
+                result = "List of available cars: <br> <br>"
+                for car in car_list:
+                    result = result + "{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t <br>".format(car.CarID,
+                                                                                                         car.status,
+                                                                                                         car.Name,
+                                                                                                         car.model,
+                                                                                                         car.brand,
+                                                                                                         car.company,
+                                                                                                         car.colour,
+                                                                                                         car.seats,
+                                                                                                         car.description,
+                                                                                                         car.category,
+                                                                                                         car.cost_per_hour,
+                                                                                                         car.location,
+                                                                                                         car.CustomerID)
+            else:
+                flash("You currently do not have any car booked")
+                return redirect(url_for("customerbp.customerHome"))
+            return render_template("book.html", carlist=result)
     else:
-        return redirect(url_for("login"))
-
+        return redirect(url_for("customerHome"))
 
 @customerbp.route("/cancel", methods=["GET", "POST"])
 def cancelBooking():
@@ -248,13 +294,7 @@ def bookCalendar():
 
         date = request.form["from"]
         date2 = request.form["to"]
-        # time_start = datetime.strptime(date, '%Y/%m/%d')
-        # time_end = datetime.strptime(date2, '%Y/%m/%d')
-        # date = datetime(2020,9,30)
-        # start = date.strftime("%Y-%m-%d")
         time_start = "{}T06:00:00+10:00".format(date)
-        # date2 = datetime(2020,10,1)
-        # end = date2.strftime("%Y-%m-%d")
         time_end = "{}T07:00:00+10:00".format(date2)
         event = {
             "summary": "Car Booking Duration",
@@ -281,6 +321,7 @@ def bookCalendar():
         }
 
         event = service.events().insert(calendarId="primary", body=event).execute()
+        # event = service.events().delete(calendarId="primary", eventId=date).execute()
         print("Event created: {}".format(event.get("htmlLink")))
 
         flash("Calendar Updated")
