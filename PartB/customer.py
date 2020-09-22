@@ -1,5 +1,5 @@
 from __future__ import print_function
-
+import re
 from flask import Blueprint, render_template, session, redirect, url_for, request, flash
 from database_utils import DatabaseUtils
 
@@ -354,3 +354,34 @@ def searchCarById(car_id):
         CarID=car_id
     ).first()
     return car
+
+
+
+def inputValidation(check):
+    """
+        Input Validation String Before Committing Database
+    """
+    pattern = re.compile("^([A-Z]]+)+$")
+    pattern.match(check)
+
+def isFloat(str):
+    """
+        Input Validation Float Before Committing Database
+    """
+    try:
+        if (str != ""):
+            float(str)
+    except ValueError:
+        return False
+    return True
+
+def isInt(str):
+    """
+        Input Validation Integer Before Committing Database
+    """
+    try:
+        if (str!=""):
+            int(str)
+    except ValueError:
+        return False
+    return True
