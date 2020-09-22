@@ -218,7 +218,7 @@ def availableBooking():
                 return redirect(url_for("customerbp.customerHome"))
             return render_template("book.html", carlist=result)
     else:
-        return redirect(url_for("customerHome"))
+        return redirect(url_for("customerbp.customerHome"))
 
 @customerbp.route("/cancel", methods=["GET", "POST"])
 def cancelBooking():
@@ -260,7 +260,7 @@ def cancelBooking():
                 return redirect(url_for("customerbp.customerHome"))
             return render_template("cancel.html", carlist=result)
     else:
-        return redirect(url_for("customerHome"))
+        return redirect(url_for("customerbp.customerHome"))
 
 
 @customerbp.route("/bookCalendar", methods=["POST"])
