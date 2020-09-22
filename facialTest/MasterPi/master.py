@@ -23,9 +23,35 @@ def main():
                 print()
 
                 user = socket_utils.recvJson(conn)
+                engineer = socket_utils.recvJson(conn)
                 menu(user)
+                engineerMenu(engineer)
+                
 
                 socket_utils.sendJson(conn, { "logout": True })
+
+def engineerMenu(engineer):
+    while(True):
+            print("Welcome {}".format(engineer["Name"]))
+            print("1. Display user details")
+            print("0. Logout")
+            print()
+
+            text = input("Select an option: ")
+            print()
+
+            if(text == "1"):
+                print("Username  : {}".format(engineer["name"]))
+                print("First Name: {}".format(engineer["phone"]))
+                print("Last Name : {}".format(engineer["email"]))
+                print()
+            elif(text == "0"):
+                print("Goodbye.")
+                print()
+                break
+            else:
+                print("Invalid input, try again.")
+                print()
 
 def menu(user):
     while(True):
