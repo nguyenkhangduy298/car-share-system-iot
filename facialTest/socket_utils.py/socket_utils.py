@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # Documentation: https://docs.python.org/3/library/struct.html
-import socket, json, struct
+import socket, json, struct, sqlite3,sys
 
 def sendJson(socket, object):
     jsonString = json.dumps(object)
