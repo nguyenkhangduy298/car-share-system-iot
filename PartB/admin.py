@@ -34,6 +34,14 @@ class ResultCar (Table):
     location = Col('location')
     CustomerID = Col(' CustomerID')
 
+class ResultHistory (Table):
+    HistoryID = Col('HistoryID ')
+    status = Col('status')
+    carID = Col('carID')
+    customerID = Col('customerID')
+    bookTime = Col('bookTime ')
+    endTime = Col(' endTime ')
+
 
 @adminbp.route("/", methods=["GET"])
 def adminHome():
@@ -110,15 +118,18 @@ def getRentalHistory():
         from main import BookHistory
         history = BookHistory.query.all()
         if len(history) > 0:
-            result = ""
-            for rent in history:
-                result = result + "{}\t{}\t{}\t{}\t{}\t{} <br>".format(rent.HistoryID, 
-                                                                        rent.status,
-                                                                        rent.carID,
-                                                                        rent.customerID, 
-                                                                        rent.bookTime,
-                                                                        rent.endTime)
-            return result
+            table = ResultHistory (history)
+            table.border = True
+            return render_template('tableHistory.html', table =table )
+            # result = ""
+            # for rent in history:
+            #     result = result + "{}\t{}\t{}\t{}\t{}\t{} <br>".format(rent.HistoryID, 
+            #                                                             rent.status,
+            #                                                             rent.carID,
+            #                                                             rent.customerID, 
+            #                                                             rent.bookTime,
+            #                                                             rent.endTime)
+            # return result
         else:
             flash("There is no car rental history")
             return redirect(url_for("adminbp.getRentalHistory"))
