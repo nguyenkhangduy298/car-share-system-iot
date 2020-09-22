@@ -52,4 +52,4 @@ html_static_path = ['_static']
 
 autodoc_mock_imports = ['database_utils', 'googleapiclient', 'httplib2',
                             'oauth2client', 'admin', 'engineer', 'customer',
-                            'manager']
+                            'manager', 'flask_table']

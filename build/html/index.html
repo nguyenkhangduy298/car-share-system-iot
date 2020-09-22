@@ -1,0 +1,250 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Welcome to Car Share System - Assignment 2’s documentation! &#8212; Car Share System - Assignment 2  documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="welcome-to-car-share-system-assignment-2-s-documentation">
+<h1>Welcome to Car Share System - Assignment 2’s documentation!<a class="headerlink" href="#welcome-to-car-share-system-assignment-2-s-documentation" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+</div>
+</div>
+<div class="section" id="module-PartB.main">
+<span id="login-page-for-both-executives-and-customers"></span><h1>Login page for both executives and customers<a class="headerlink" href="#module-PartB.main" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt id="PartB.main.BookHistory">
+<em class="property">class </em><code class="sig-prename descclassname">PartB.main.</code><code class="sig-name descname">BookHistory</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">HistoryID</span></em>, <em class="sig-param"><span class="n">status</span></em>, <em class="sig-param"><span class="n">carID</span></em>, <em class="sig-param"><span class="n">customerID</span></em>, <em class="sig-param"><span class="n">bookTime</span></em>, <em class="sig-param"><span class="n">endTime</span></em><span class="sig-paren">)</span><a class="headerlink" href="#PartB.main.BookHistory" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
+<dt id="PartB.main.Car">
+<em class="property">class </em><code class="sig-prename descclassname">PartB.main.</code><code class="sig-name descname">Car</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">status</span></em>, <em class="sig-param"><span class="n">Name</span></em>, <em class="sig-param"><span class="n">model</span></em>, <em class="sig-param"><span class="n">brand</span></em>, <em class="sig-param"><span class="n">company</span></em>, <em class="sig-param"><span class="n">colour</span></em>, <em class="sig-param"><span class="n">seats</span></em>, <em class="sig-param"><span class="n">description</span></em>, <em class="sig-param"><span class="n">category</span></em>, <em class="sig-param"><span class="n">cost_per_hour</span></em>, <em class="sig-param"><span class="n">location</span></em>, <em class="sig-param"><span class="n">CustomerID</span></em><span class="sig-paren">)</span><a class="headerlink" href="#PartB.main.Car" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
+<dt id="PartB.main.Person">
+<em class="property">class </em><code class="sig-prename descclassname">PartB.main.</code><code class="sig-name descname">Person</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">username</span></em>, <em class="sig-param"><span class="n">password</span></em>, <em class="sig-param"><span class="n">position</span></em>, <em class="sig-param"><span class="n">name</span></em>, <em class="sig-param"><span class="n">address</span></em>, <em class="sig-param"><span class="n">phone</span></em>, <em class="sig-param"><span class="n">fax</span></em>, <em class="sig-param"><span class="n">email</span></em>, <em class="sig-param"><span class="n">contact</span></em>, <em class="sig-param"><span class="n">image</span></em><span class="sig-paren">)</span><a class="headerlink" href="#PartB.main.Person" title="Permalink to this definition">¶</a></dt>
+<dd><p>Represent the Person table of remote database</p>
+<p>This is used to store the login credentials and position
+information of all person. These data helps
+the process of logging in to the system.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="PartB.main.ReportedCar">
+<em class="property">class </em><code class="sig-prename descclassname">PartB.main.</code><code class="sig-name descname">ReportedCar</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">location</span></em>, <em class="sig-param"><span class="n">latitude</span></em>, <em class="sig-param"><span class="n">longitude</span></em><span class="sig-paren">)</span><a class="headerlink" href="#PartB.main.ReportedCar" title="Permalink to this definition">¶</a></dt>
+<dd><p>Represent the ReportedCar table of the remote database</p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="PartB.main.Role">
+<em class="property">class </em><code class="sig-prename descclassname">PartB.main.</code><code class="sig-name descname">Role</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">position</span></em><span class="sig-paren">)</span><a class="headerlink" href="#PartB.main.Role" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="PartB.main.login">
+<code class="sig-prename descclassname">PartB.main.</code><code class="sig-name descname">login</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#PartB.main.login" title="Permalink to this definition">¶</a></dt>
+<dd><p>Routing to login page for executive</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="PartB.main.logout">
+<code class="sig-prename descclassname">PartB.main.</code><code class="sig-name descname">logout</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#PartB.main.logout" title="Permalink to this definition">¶</a></dt>
+<dd><p>Log out from current session user</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="PartB.main.register">
+<code class="sig-prename descclassname">PartB.main.</code><code class="sig-name descname">register</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#PartB.main.register" title="Permalink to this definition">¶</a></dt>
+<dd><p>Routing to page for registering executive account</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-PartB.customer">
+<span id="part-a-web-page-for-car-share-system-user-functions"></span><h1>Part A: Web page for Car Share System (User Functions)<a class="headerlink" href="#module-PartB.customer" title="Permalink to this headline">¶</a></h1>
+<dl class="py function">
+<dt id="PartB.customer.availableBooking">
+<code class="sig-prename descclassname">PartB.customer.</code><code class="sig-name descname">availableBooking</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#PartB.customer.availableBooking" title="Permalink to this definition">¶</a></dt>
+<dd><p>Book an available car for the user</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="PartB.customer.bookCalendar">
+<code class="sig-prename descclassname">PartB.customer.</code><code class="sig-name descname">bookCalendar</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#PartB.customer.bookCalendar" title="Permalink to this definition">¶</a></dt>
+<dd><p>Booking Cars and Update in Google Calendar</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="PartB.customer.cancelBooking">
+<code class="sig-prename descclassname">PartB.customer.</code><code class="sig-name descname">cancelBooking</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#PartB.customer.cancelBooking" title="Permalink to this definition">¶</a></dt>
+<dd><p>Cancel a car booking of the user</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="PartB.customer.customerContact">
+<code class="sig-prename descclassname">PartB.customer.</code><code class="sig-name descname">customerContact</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#PartB.customer.customerContact" title="Permalink to this definition">¶</a></dt>
+<dd><p>Routing to customer’s page</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="PartB.customer.customerHome">
+<code class="sig-prename descclassname">PartB.customer.</code><code class="sig-name descname">customerHome</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#PartB.customer.customerHome" title="Permalink to this definition">¶</a></dt>
+<dd><p>Routing to admin’s page</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="PartB.customer.inputValidation">
+<code class="sig-prename descclassname">PartB.customer.</code><code class="sig-name descname">inputValidation</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">check</span></em><span class="sig-paren">)</span><a class="headerlink" href="#PartB.customer.inputValidation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Input Validation String Before Committing Database</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="PartB.customer.isFloat">
+<code class="sig-prename descclassname">PartB.customer.</code><code class="sig-name descname">isFloat</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">str</span></em><span class="sig-paren">)</span><a class="headerlink" href="#PartB.customer.isFloat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Input Validation Float Before Committing Database</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="PartB.customer.isInt">
+<code class="sig-prename descclassname">PartB.customer.</code><code class="sig-name descname">isInt</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">str</span></em><span class="sig-paren">)</span><a class="headerlink" href="#PartB.customer.isInt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Input Validation Integer Before Committing Database</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="PartB.customer.searchCar">
+<code class="sig-prename descclassname">PartB.customer.</code><code class="sig-name descname">searchCar</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#PartB.customer.searchCar" title="Permalink to this definition">¶</a></dt>
+<dd><p>Search Car By Properties</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="PartB.customer.viewCarList">
+<code class="sig-prename descclassname">PartB.customer.</code><code class="sig-name descname">viewCarList</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#PartB.customer.viewCarList" title="Permalink to this definition">¶</a></dt>
+<dd><p>View User’s Car List History</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-PartB.admin">
+<span id="part-b-web-page-for-car-share-system-executive-functions"></span><h1>Part B: Web page for Car Share System (Executive Functions)<a class="headerlink" href="#module-PartB.admin" title="Permalink to this headline">¶</a></h1>
+<dl class="py function">
+<dt id="PartB.admin.adminHome">
+<code class="sig-prename descclassname">PartB.admin.</code><code class="sig-name descname">adminHome</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#PartB.admin.adminHome" title="Permalink to this definition">¶</a></dt>
+<dd><p>Routing to admin’s page</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="PartB.admin.getRentalHistory">
+<code class="sig-prename descclassname">PartB.admin.</code><code class="sig-name descname">getRentalHistory</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#PartB.admin.getRentalHistory" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get car rental history</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="PartB.admin.sendEmail">
+<code class="sig-prename descclassname">PartB.admin.</code><code class="sig-name descname">sendEmail</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#PartB.admin.sendEmail" title="Permalink to this definition">¶</a></dt>
+<dd><p>Send email to engineers when admin report a car</p>
+</dd></dl>
+
+<span class="target" id="module-PartB.engineer"></span><dl class="py function">
+<dt id="PartB.engineer.engineerHome">
+<code class="sig-prename descclassname">PartB.engineer.</code><code class="sig-name descname">engineerHome</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#PartB.engineer.engineerHome" title="Permalink to this definition">¶</a></dt>
+<dd><p>Routing to engineer’s page</p>
+</dd></dl>
+
+<span class="target" id="module-PartB.manager"></span><dl class="py function">
+<dt id="PartB.manager.managerHome">
+<code class="sig-prename descclassname">PartB.manager.</code><code class="sig-name descname">managerHome</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#PartB.manager.managerHome" title="Permalink to this definition">¶</a></dt>
+<dd><p>Routing to manager’s page</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="#">Car Share System - Assignment 2</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="#">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Group 10.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/index.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
