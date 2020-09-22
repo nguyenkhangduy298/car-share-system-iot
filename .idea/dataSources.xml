@@ -7,5 +7,11 @@
       <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
       <jdbc-url>jdbc:sqlite:$PROJECT_DIR$/facialTest/ReceptionPi/reception.db</jdbc-url>
     </data-source>
+    <data-source source="LOCAL" name="reception [2]" uuid="27a01e98-fdc9-4fca-b37d-3128f9b5ffd2">
+      <driver-ref>sqlite.xerial</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
+      <jdbc-url>jdbc:sqlite:$PROJECT_DIR$/facialTest/socket_utils.py/ReceptionPi/reception.db</jdbc-url>
+    </data-source>
   </component>
 </project>

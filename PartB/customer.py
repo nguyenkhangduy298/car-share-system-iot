@@ -184,13 +184,13 @@ def availableBooking():
         if request.method == "POST":
             try:
                 car = Car.query.filter(Car.CarID==request.form["id"]).first()
-                car.status = "Available"
-                car.CustomerID = None
+                car.status = "Booked"
+                car.CustomerID = 7
                 db.session.commit()
-                flash("Cancel successfully")
+                flash("Book successfully")
                 return redirect(url_for("customerbp.availableBooking"))
             except AttributeError:
-                flash("You have no car of that ID booked")
+                flash("No car of that ID booked")
                 return redirect(url_for("customerbp.availableBooking"))
         else:
             from main import Car
@@ -269,64 +269,74 @@ def bookCalendar():
         Booking Cars and Update in Google Calendar
     """
     if request.method == "POST":
+        from main import Car, Person, db
+        try:
+            car = Car.query.filter(Car.CarID == request.form["id"]).first()
+            car.status = "Booked"
+            car.CustomerID = 7
+            db.session.commit()
 
-        # If modifying these scopes, delete the file token.json.
-        SCOPES = "https://www.googleapis.com/auth/calendar"
-        store = file.Storage("token.json")
-        creds = store.get()
-        if (not creds or creds.invalid):
-            flow = client.flow_from_clientsecrets("credentials.json", SCOPES)
-            creds = tools.run_flow(flow, store)
-        service = build("calendar", "v3", http=creds.authorize(Http()))
 
-        # Call the Calendar API.
-        now = datetime.utcnow().isoformat() + "Z"  # "Z" indicates UTC time.
-        print("Getting the upcoming 10 events.")
-        events_result = service.events().list(calendarId="primary", timeMin=now,
-                                              maxResults=10, singleEvents=True, orderBy="startTime").execute()
-        events = events_result.get("items", [])
+            # If modifying these scopes, delete the file token.json.
+            SCOPES = "https://www.googleapis.com/auth/calendar"
+            store = file.Storage("token.json")
+            creds = store.get()
+            if (not creds or creds.invalid):
+                flow = client.flow_from_clientsecrets("credentials.json", SCOPES)
+                creds = tools.run_flow(flow, store)
+            service = build("calendar", "v3", http=creds.authorize(Http()))
 
-        if (not events):
-            print("No upcoming events found.")
-        for event in events:
-            start = event["start"].get("dateTime", event["start"].get("date"))
-            print(start, event["summary"])
+            # Call the Calendar API.
+            now = datetime.utcnow().isoformat() + "Z"  # "Z" indicates UTC time.
+            print("Getting the upcoming 10 events.")
+            events_result = service.events().list(calendarId="primary", timeMin=now,
+                                                  maxResults=10, singleEvents=True, orderBy="startTime").execute()
+            events = events_result.get("items", [])
 
-        date = request.form["from"]
-        date2 = request.form["to"]
-        time_start = "{}T06:00:00+10:00".format(date)
-        time_end = "{}T07:00:00+10:00".format(date2)
-        event = {
-            "summary": "Car Booking Duration",
-            "location": "RMIT",
-            "description": "Adding new IoT event",
-            "start": {
-                "dateTime": time_start,
-                "timeZone": "Asia/Tokyo",
-            },
-            "end": {
-                "dateTime": time_end,
-                "timeZone": "Asia/Tokyo",
-            },
-            "attendees": [
-                {"email": "kduy298@gmail.com"},
-            ],
-            "reminders": {
-                "useDefault": False,
-                "overrides": [
-                    {"method": "email", "minutes": 5},
-                    {"method": "popup", "minutes": 10},
+            if (not events):
+                print("No upcoming events found.")
+            for event in events:
+                start = event["start"].get("dateTime", event["start"].get("date"))
+                print(start, event["summary"])
+
+            date = request.form["from"]
+            date2 = request.form["to"]
+            time_start = "{}T06:00:00+10:00".format(date)
+            time_end = "{}T07:00:00+10:00".format(date2)
+            event = {
+                "summary": "Car Booking Duration",
+                "location": "RMIT",
+                "description": "Adding new IoT event",
+                "start": {
+                    "dateTime": time_start,
+                    "timeZone": "Asia/Tokyo",
+                },
+                "end": {
+                    "dateTime": time_end,
+                    "timeZone": "Asia/Tokyo",
+                },
+                "attendees": [
+                    {"email": "kduy298@gmail.com"},
                 ],
+                "reminders": {
+                    "useDefault": False,
+                    "overrides": [
+                        {"method": "email", "minutes": 5},
+                        {"method": "popup", "minutes": 10},
+                    ],
+                }
             }
-        }
 
-        event = service.events().insert(calendarId="primary", body=event).execute()
-        # event = service.events().delete(calendarId="primary", eventId=date).execute()
-        print("Event created: {}".format(event.get("htmlLink")))
+            event = service.events().insert(calendarId="primary", body=event).execute()
+            # event = service.events().delete(calendarId="primary", eventId=123456).execute()
+            print("Event created: {}".format(event.get("htmlLink")))
 
-        flash("Calendar Updated")
-        flash("Car Booked")
-        return redirect(url_for("customerbp.customerHome"))
+            flash("Calendar Updated")
+            flash("Car Booked Successfully")
+            return redirect(url_for("customerbp.customerHome"))
+        except AttributeError:
+            flash("No car of that ID booked")
+            return redirect(url_for("customerbp.availableBooking"))
 
 def searchCarById(car_id):
     from main import Car
