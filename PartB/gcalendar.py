@@ -33,7 +33,7 @@ def main():
     now = datetime.utcnow().isoformat() + "Z" # "Z" indicates UTC time.
     print("Getting the upcoming 10 events.")
     events_result = service.events().list(calendarId = "primary", timeMin = now,
-        maxResults = 10, singleEvents = True, orderBy = "startTime").execute()
+        maxResults = 1, singleEvents = True, orderBy = "startTime").execute()
     events = events_result.get("items", [])
 
     if(not events):
@@ -72,7 +72,8 @@ def insert():
         }
     }
 
-    event = service.events().insert(calendarId = "primary", body = event).execute()
+    # event = service.events().insert(calendarId = "primary", body = event).execute()
+    # event = service.events().delete(calendarId = "primary", eventId = "ahra8d0cbrsc0vilrv8l05m54s nguyenkhangduy298@m").execute()
     print("Event created: {}".format(event.get("htmlLink")))
 
 if __name__ == "__main__":

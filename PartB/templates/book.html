@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block title %} Cancel booking {% endblock %}
+{% block content %}
+
+    <!-- MAIN CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        .topnav {
+          overflow: hidden;
+          background-color: #f1f1f1;
+        }
+
+        .topnav a {
+          float: left;
+          display: block;
+          color: black;
+          text-align: center;
+          padding: 14px 16px;
+          text-decoration: none;
+          font-size: 17px;
+          border-bottom: 3px solid transparent;
+        }
+
+        .topnav a:hover {
+          border-bottom: 3px solid red;
+        }
+
+        .topnav a.active {
+          border-bottom: 3px solid red;
+        }
+        .form-control, .btn {
+            min-height: 25px;
+            border-radius: 2px;
+        }
+
+
+    </style>
+
+    {{carlist|safe}}
+    <br> <br>
+    <div class="modal-body">
+                   <form action="http://127.0.0.1:5000/customer/bookCalendar" id="contact-form" method="post">
+
+                        <div class="row">
+                            <label>ID of the car you want to book</label>
+                            <input type="number" name="id">
+                            <input type="submit" name="Submit">
+                             <div class="col-md-6">
+                                  <input type="text" name="from" class="form-control" placeholder="Pick-up date/time" required>
+                             </div>
+
+                             <div class="col-md-6">
+                                  <input type="text" name="to" class="form-control" placeholder="Return date/time" required>
+                             </div>
+                            <div class="modal-footer">
+                                <input type="submit" class="section-btn btn btn-primary" VALUE="BOOK"/>
+                            </div>
+                        </div>
+
+                   </form>
+              </div>
+{% endblock %}
