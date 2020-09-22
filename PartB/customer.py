@@ -269,13 +269,23 @@ def bookCalendar():
         Booking Cars and Update in Google Calendar
     """
     if request.method == "POST":
-        from main import Car, Person, db
+        from main import Car, Person, BookHistory, db
         try:
             car = Car.query.filter(Car.CarID == request.form["id"]).first()
             car.status = "Booked"
             car.CustomerID = 7
             db.session.commit()
 
+
+            status = "Processed"
+            carID = int(request.form["id"])
+            customerID = 7
+            bookTime = request.form["from"]
+            endTime = request.form["to"]
+            bookId = 11
+            bookHistory = BookHistory(bookId,status,carID,customerID,bookTime,endTime)
+            db.session.add(bookHistory)
+            db.session.commit()
 
             # If modifying these scopes, delete the file token.json.
             SCOPES = "https://www.googleapis.com/auth/calendar"
