@@ -1,10 +1,38 @@
 from flask import Blueprint, render_template, session, redirect, url_for, request, flash
+from flask_table import Table, Col, LinkCol
 from email.mime.text import MIMEText
 from geopy.geocoders import Nominatim
 import smtplib
 import ssl
 
+
 adminbp = Blueprint("adminbp", __name__, template_folder="templates")
+
+class Results(Table):
+    ID = Col('ID')
+    username = Col('username')
+    name= Col('name')
+    password = Col('password')
+    address = Col('address')
+    phone = Col('phone')
+    fax= Col('fax')
+    email = Col('email')
+    contact = Col('contact')
+
+class ResultCar (Table):
+    CarID = Col('ID')
+    status = Col('status ')
+    Name  = Col('Name ')
+    model = Col('model ')
+    brand = Col('brand')
+    company = Col('company')
+    colour = Col('colour ')
+    seats = Col('seats')
+    description = Col('description')
+    category = Col('category')
+    cost_per_hour = Col('cost_per_hour')
+    location = Col('location')
+    CustomerID = Col(' CustomerID')
 
 
 @adminbp.route("/", methods=["GET"])
@@ -116,17 +144,24 @@ def searchCustomer():
                     Person.contact.like("%{}%".format(request.form["contact"]))
                 ).all()
                 if len(customer_list) > 0:
-                    result = ""
-                    for customer in customer_list:
-                        result = result + "{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t <br>".format(customer.ID,
-                                                                                    customer.username,
-                                                                                    customer.name,
-                                                                                    customer.address,
-                                                                                    customer.phone,
-                                                                                    customer.fax,
-                                                                                    customer.email,
-                                                                                    customer.contact)
-                    return result
+                    # for customer in customer_list:
+                    table = Results (customer_list)
+                    table.border = True
+                    return render_template('table.html', table =table )
+                # if len(customer_list) > 0:
+                #     table = ""
+                #     for customer in customer_list:
+                        
+                #         result =table + "{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t <br>".format(customer.ID,
+                #                                                                     customer.username,
+                #                                                                     customer.name,
+                #                                                                     customer.address,
+                #                                                                     customer.phone,
+                #                                                                     customer.fax,
+                #                                                                     customer.email,
+                #                                                                     customer.contact)
+                #         result.border = True
+                #     return result
                 else:
                     flash("Cannot find matching result")
                     return redirect(url_for("adminbp.searchCustomer"))
@@ -241,22 +276,27 @@ def searchCar():
                     Car.CustomerID.like("%{}%".format(request.form["customer"]))
                 ).all()
                 if len(car_list) > 0:
-                    result = ""
-                    for car in car_list:
-                        result = result + "{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t <br>".format(car.CarID,
-                                                                                                        car.status,
-                                                                                                        car.Name,
-                                                                                                        car.model,
-                                                                                                        car.brand,
-                                                                                                        car.company,
-                                                                                                        car.colour,
-                                                                                                        car.seats,
-                                                                                                        car.description,
-                                                                                                        car.category,
-                                                                                                        car.cost_per_hour,
-                                                                                                        car.location,
-                                                                                                        car.CustomerID)
-                    return result
+                    # for customer in customer_list:
+                    table = ResultCar (car_list)
+                    table.border = True
+                    return render_template('tableCar.html', table =table )
+                # if len(car_list) > 0:
+                #     result = ""
+                #     for car in car_list:
+                #         result = result + "{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t <br>".format(car.CarID,
+                #                                                                                         car.status,
+                #                                                                                         car.Name,
+                #                                                                                         car.model,
+                #                                                                                         car.brand,
+                #                                                                                         car.company,
+                #                                                                                         car.colour,
+                #                                                                                         car.seats,
+                #                                                                                         car.description,
+                #                                                                                         car.category,
+                #                                                                                         car.cost_per_hour,
+                #                                                                                         car.location,
+                #                                                                                         car.CustomerID)
+                #     return result
                 else:
                     flash("Cannot find any matching results")
                     return redirect(url_for("adminbp.searchCar"))
